@@ -8,8 +8,10 @@ const config = {
     storageBucket: "passwordkeeper-f658d.appspot.com",
     messagingSenderId: "102203431113"
   };
-  const fire = firebase.initializeApp(config);
-  export default fire;
-  //if (!firebase.apps.length) {
-  //  firebase.initializeApp(config);
-  //}
+export const fire = firebase.initializeApp(config);
+//google
+export const providerGoogle = new firebase.auth.GoogleAuthProvider();
+//facebook
+export const providerFacebook = new firebase.auth.FacebookAuthProvider()
+
+export const auth = firebase.auth();

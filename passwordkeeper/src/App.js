@@ -1,41 +1,68 @@
 import React, { Component } from 'react';
 import './App.css';
-import fire from './config/Connection';
-import Home from './Home';
-import Login from './Login';
+import fire, { auth, providerGoogle, providerFacebook } from './config/Fire';
 
 class App extends Component {
 
   constructor(props) {
-    super(props);
+    super();
     this.state = {
-      user:{},
+      currentItem: '',
+      username: '',
+      items: [],
+      user: null // <-- add this line
     }
+    this.login = this.loginGoogle.bind(this);
+    this.logout = this.logout.bind(this);
   }
 
-  componentDidMount() {
-    this.authListner();
+  loginGoogle() {
+    auth.signInWithPopup(providerGoogle) 
+      .then((result) => {
+        const user = result.user;
+        this.setState({
+          user
+        });
+      });
   }
 
-  authListner() {
-    fire.auth().onAuthStateChanged((user) => {
-      //console.log(user);
-      if(user) {
-        this.setState({user});
-      //  localStorage.setItem('user', user.uid);
-      }else {
-        this.setState({user:null});
-      //  localStorage.removeItem('user');
-      }
-    });
+  loginFacebook() {
+    auth.signInWithPopup(providerFacebook) 
+      .then((result) => {
+        const user = result.user;
+        this.setState({
+          user
+        });
+      });
   }
 
-
+  logout() {
+    auth.signOut()
+      .then(() => {
+        this.setState({
+          user: null
+        });
+      });
+  }
 
   render() {
     return (
-     <div>{this.state.user ? : ( <Home/>) : (<Login />)}</div>
-}
+      <div className="wrapper">
+        <h1>PROGETTO PAWM</h1>
+        {this.state.user ?
+          <button onClick={this.logout}>Log Out</button>                
+          :
+          <button onClick={this.loginGoogle}>Google Log In</button>              
+        }
+
+        {this.state.user ?
+          <button onClick={this.logout}>Log Out</button>                
+          :
+          <button onClick={this.loginFacebook}>Facebook Log In</button>              
+        }
+      </div>
+    
+    )}
 }
 
 export default App;
