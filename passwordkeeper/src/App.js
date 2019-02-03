@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import './App.css';
-import fire, { auth, providerGoogle, providerFacebook } from './config/Fire';
+import  { fire, auth, providerGoogle, providerFacebook } from './config/Fire';
 
 class App extends Component {
 
@@ -13,6 +13,7 @@ class App extends Component {
       user: null // <-- add this line
     }
     this.login = this.loginGoogle.bind(this);
+    this.loginFb = this.loginFacebook.bind(this);
     this.logout = this.logout.bind(this);
   }
 
@@ -33,6 +34,7 @@ class App extends Component {
         this.setState({
           user
         });
+        console.log(user);
       });
   }
 
