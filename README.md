@@ -19,4 +19,5 @@ https://passwordkeeper-f658d.firebaseapp.com/
 import firebase from 'firebase';
 
 
-
+// sicurezza
+abbiamo implementato dei metodi per prevenire il phishing
