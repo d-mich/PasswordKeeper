@@ -3,7 +3,7 @@ import { BrowserRouter, Route, Redirect } from 'react-router-dom';
 import { Spinner } from '@blueprintjs/core';
 import './App.css';
 import  { fire } from './config/Fire';
-import Header from './components/Home';
+import Header from './components/Header';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Footer from './components/Footer';
@@ -62,24 +62,7 @@ class App extends Component {
                   return <Login setCurrentUser={this.setCurrentUser} {...props} />
                 }} />
                 {/* compontent=Logout se scritto come route restituisce la pagina logout */}
-                
-                
                 <Route exact path="/logout" component={Logout} />
-                
-                {/* <AuthenticatedRoute
-                  exact
-                  path="/songs"
-                  authenticated={this.state.authenticated}
-                  component={SongList}
-                  songs={this.state.songs} />
-                <ShowRoute
-                  path="/songs/:songId"
-                  authenticated={this.state.authenticated}
-                  requireAuth={true}
-                  param="songId"
-                  updateSong={this.updateSong}
-                  items={this.state.songs} /> */}
-
               </div>
             </div>
           </div>
