@@ -33,3 +33,5 @@ importato rebase con npm install react-rebase .
 //login.js
 tramite    import { Redirect } from 'react-router-dom';
 quando un utente viene autenticato con successo può essere reindirizzato in un'altra route, a seconda della policy del sito.
+tramite npm i @blueprintjs/core
+installiamo la libreria blueprint per visualizzazione grafica
