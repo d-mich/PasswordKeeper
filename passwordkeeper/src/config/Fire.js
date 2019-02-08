@@ -1,4 +1,5 @@
 import firebase from 'firebase';
+import Rebase from 're-base';
 
 const config = {
     apiKey: "AIzaSyDgbshv48FsPtB349EXKJyWWIhwdK9ohMw",
@@ -14,6 +15,6 @@ const providerGoogle = new firebase.auth.GoogleAuthProvider();
 //facebook
 const providerFacebook = new firebase.auth.FacebookAuthProvider()
 
-const auth = firebase.auth();
+const base = Rebase.createClass(fire.database())
 
-export {fire, providerGoogle, providerFacebook, auth}
+export {fire, base, providerGoogle, providerFacebook }

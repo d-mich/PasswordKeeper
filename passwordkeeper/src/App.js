@@ -1,70 +1,94 @@
 import React, { Component } from 'react';
+import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { Spinner } from '@blueprintjs/core';
 import './App.css';
-import  { fire, auth, providerGoogle, providerFacebook } from './config/Fire';
+import  { fire } from './config/Fire';
+import Header from './components/Home';
+import Login from './components/Login';
+import Logout from './components/Logout';
+import Footer from './components/Footer';
 
 class App extends Component {
 
-  constructor(props) {
+  constructor() {
     super();
     this.state = {
-      currentItem: '',
-      username: '',
-      items: [],
-      user: null // <-- add this line
-    }
-    this.login = this.loginGoogle.bind(this);
-    this.loginFb = this.loginFacebook.bind(this);
-    this.logout = this.logout.bind(this);
+      authenticated: false,
+      currentUser: null,
+      loading: true,
+    };
   }
 
-  loginGoogle() {
-    auth.signInWithPopup(providerGoogle) 
-      .then((result) => {
-        const user = result.user;
+  componentWillMount() {
+    this.removeAuthListener = fire.auth().onAuthStateChanged((user) => {
+      if (user) {
         this.setState({
-          user
-        });
-      });
+          authenticated: true,
+          loading : false         
+        })
+      }else {
+        this.setState({
+          authenticated: false,
+          loading : false             
+        })
+      }
+    })
   }
 
-  loginFacebook() {
-    auth.signInWithPopup(providerFacebook) 
-      .then((result) => {
-        const user = result.user;
-        this.setState({
-          user
-        });
-        console.log(user);
-      });
+  componentWillUnmount() {
+    this.removeAuthListener();
   }
 
-  logout() {
-    auth.signOut()
-      .then(() => {
-        this.setState({
-          user: null
-        });
-      });
-  }
 
   render() {
-    return (
-      <div className="wrapper">
-        <h1>PROGETTO PAWM</h1>
-        {this.state.user ?
-          <button onClick={this.logout}>Log Out</button>                
-          :
-          <button onClick={this.loginGoogle}>Google Log In</button>              
-        }
+    if (this.state.loading === true) {
+      return (
+        <div style={{ textAlign: "center", position: "absolute", top: "25%", left: "50%" }}>
+          <h3>Loading</h3>
+          <Spinner />
+        </div>
+      )
+    }
 
-        {this.state.user ?
-          <button onClick={this.logout}>Log Out</button>                
-          :
-          <button onClick={this.loginFacebook}>Facebook Log In</button>              
-        }
+    return (
+      <div style={{maxWidth: "1160px", margin: "0 auto"}}>
+        <BrowserRouter>
+          <div>
+            {/* PASSO LA VARIABILE AUTENTICATED AD HEADER */}
+            <Header addSong={this.addSong} authenticated={this.state.authenticated} />
+            <div className="main-content" style={{padding: "1em"}}>
+              <div className="workspace">
+                <Route exact path="/login" render={(props) => {
+                  return <Login setCurrentUser={this.setCurrentUser} {...props} />
+                }} />
+                {/* compontent=Logout se scritto come route restituisce la pagina logout */}
+                
+                
+                <Route exact path="/logout" component={Logout} />
+                
+                {/* <AuthenticatedRoute
+                  exact
+                  path="/songs"
+                  authenticated={this.state.authenticated}
+                  component={SongList}
+                  songs={this.state.songs} />
+                <ShowRoute
+                  path="/songs/:songId"
+                  component={ChordEditor}
+                  authenticated={this.state.authenticated}
+                  requireAuth={true}
+                  param="songId"
+                  updateSong={this.updateSong}
+                  items={this.state.songs} /> */}
+
+              </div>
+            </div>
+          </div>
+        </BrowserRouter>
+        <Footer />
       </div>
-    
-    )}
+    );
+  }
 }
 
 export default App;
