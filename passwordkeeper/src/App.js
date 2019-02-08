@@ -74,7 +74,6 @@ class App extends Component {
                   songs={this.state.songs} />
                 <ShowRoute
                   path="/songs/:songId"
-                  component={ChordEditor}
                   authenticated={this.state.authenticated}
                   requireAuth={true}
                   param="songId"
