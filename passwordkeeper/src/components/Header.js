@@ -29,13 +29,12 @@ class Header extends Component {
             <Form inline>              
               {this.props.authenticated
               /* SE AUTENTICATO RITORNA: */
-              ? (<FormControl type="text" placeholder="Search" className="mr-sm-2" />,
-                <Button variant="outline-light" href="/logout">Logout</Button>)
+              ? <Button variant="outline-light" href="/logout" size="sm">Logout</Button>
               /* ALTRIMENTI RITORNA: */
-              : <Button variant="outline-light" href="/login">Login</Button>
+              : <Button variant="outline-light" href="/login" size="sm">Login</Button>
               }
               &nbsp;
-              <Button variant="outline-light">Impostazioni</Button>
+              <Button variant="outline-light" size="sm">Impostazioni</Button>
             </Form>
           </Navbar>
           </div>

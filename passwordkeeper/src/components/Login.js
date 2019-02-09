@@ -103,6 +103,9 @@ class Login extends Component{
             <Toaster ref={(element) => { this.toaster = element }} />
             <button style={{width: "100%"}} className="pt-button pt-intent-primary" onClick={() => { this.authWithGoogle() }}>Log In with Google</button>
             <button style={{width: "100%"}} className="pt-button pt-intent-primary" onClick={() => { this.authWithFacebook() }}>Log In with Facebook</button>
+            
+            
+            
             <hr style={{marginTop: "10px", marginBottom: "10px"}}/>
             {/* FORM, OGNI VOLTA CHE INTERAGIAMO CON I METODI DI AUTENTICAZIONE VIENE RICHIAMATO IL FORM */}
             <form onSubmit={(event) => { this.authWithEmailPassword(event) }} ref={(form) => { this.loginForm = form }}>
