@@ -23,8 +23,6 @@ class Header extends Component {
           <Navbar bg="dark" variant="dark">
             <Navbar.Brand href="/home">Password Keeper</Navbar.Brand>
             <Nav className="mr-auto">
-              <Nav.Link href="/home">Home</Nav.Link>
-              <Nav.Link href="/info">Info</Nav.Link>
             </Nav>
             <Form inline>              
               {this.props.authenticated

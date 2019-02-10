@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
 import { Toaster, Intent} from '@blueprintjs/core';
 import { fire, providerGoogle, providerFacebook } from '../config/Fire';
-
-
+import { Button, Form } from 'react-bootstrap';
+import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 
 const loginStyles = {
     width: "90%",
@@ -99,32 +99,32 @@ class Login extends Component{
 
         //redirect: default (false)
         return (
-            <div style={loginStyles}>
-            <Toaster ref={(element) => { this.toaster = element }} />
-            <button style={{width: "100%"}} className="pt-button pt-intent-primary" onClick={() => { this.authWithGoogle() }}>Log In with Google</button>
-            <button style={{width: "100%"}} className="pt-button pt-intent-primary" onClick={() => { this.authWithFacebook() }}>Log In with Facebook</button>
-            
-            
-            
-            <hr style={{marginTop: "10px", marginBottom: "10px"}}/>
-            {/* FORM, OGNI VOLTA CHE INTERAGIAMO CON I METODI DI AUTENTICAZIONE VIENE RICHIAMATO IL FORM */}
-            <form onSubmit={(event) => { this.authWithEmailPassword(event) }} ref={(form) => { this.loginForm = form }}>
-                <div style={{marginBottom: "10px"}} className="pt-callout pt-icon-info-sign">
-                <h5>Note</h5>
-                If you don't have an account already, this form will create your account.
-                </div>
-                <label className="pt-label">
-                Email
-                <input style={{width: "100%"}} className="pt-input" name="email" type="email" ref={(input) => { this.emailInput = input }} placeholder="Email"></input>
-                </label>
-                <label className="pt-label">
-                Password
-                <input style={{width: "100%"}} className="pt-input" name="password" type="password" ref={(input) => { this.passwordInput = input }} placeholder="Password"></input>
-                </label>
-                <input style={{width: "100%"}} type="submit" className="pt-button pt-intent-primary" value="Log In"></input>
-    
-            </form>
-            </div>
+          <div style={loginStyles}>
+            <Form onSubmit={(event) => { this.authWithEmailPassword(event) }} ref={(form) => { this.loginForm = form }}>
+            <Form.Group controlId="formBasicEmail">
+              <Form.Label>Email address</Form.Label>
+              <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
+              <Form.Text className="text-muted">
+                We'll never share your email with anyone else.
+              </Form.Text>
+            </Form.Group>
+
+            <Form.Group controlId="formBasicPassword">
+              <Form.Label>Password</Form.Label>
+              <Form.Control type="password" placeholder="Password" ref={(input) => { this.passwordInput = input }}/>
+            </Form.Group>
+            <Form.Group controlId="formBasicChecbox">
+              <Form.Check type="checkbox" label="Check me out" />
+            </Form.Group>
+            <Button variant="dark" type="submit">
+              Submit
+            </Button>
+          </Form>
+          <br></br>
+          <FacebookLoginButton onClick={() => { this.authWithFacebook() }} />
+          <GoogleLoginButton onClick={() => { this.authWithGoogle() }} />
+      </div>
+          
         )
     }
 }

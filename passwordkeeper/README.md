@@ -71,3 +71,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 ------aggiunta bootstrap------
 ### 'npm install react-bootstrap bootstrap'
 aggiungere poi a index.html
+
+-----aggiunta login facebook e google-----
+### 'npm i react-social-login-buttons'
