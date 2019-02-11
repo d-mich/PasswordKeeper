@@ -1,7 +1,8 @@
 import React, { Component } from 'react';
-import { Link } from 'react-router-dom';
-import { fire } from '../config/Fire';
 import {Navbar, Nav, Form, FormControl, Button, Dropdown, ButtonGroup } from 'react-bootstrap';
+import UserLogin from '../user-login.png';
+import UserLogout from '../user-logout.png';
+
 class Header extends Component {
 
     constructor(props) {
@@ -22,23 +23,18 @@ class Header extends Component {
             <Navbar.Brand href="/">Password Keeper</Navbar.Brand>
             <Nav className="mr-auto">
             </Nav>
-            <Form inline>              
-              {this.props.authenticated
-              /* SE AUTENTICATO RITORNA: */
-              ? <Button variant="outline-light" href="/logout" size="sm">Logout</Button>
-              /* ALTRIMENTI RITORNA: */
-              : <Button variant="outline-light" href="/login" size="sm">Login
-              </Button>
-              }
-              &nbsp;
-              <Dropdown as={ButtonGroup}>
-              <Button variant="outline-light" size="sm">Split Button</Button>
-              <Dropdown.Toggle split variant="outline-light" size="sm"/>
-              <Dropdown.Menu>
-                <Dropdown.Item hred="#/action-1">Logout</Dropdown.Item>
-                <Dropdown.Item hred="#/action-2">Delete</Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>;
+            <Form inline> 
+            <Button variant="outline" href="/login" size="sm">
+              <img src={UserLogin} alt="Login" width="30" height="30"/>
+            </Button>
+            {this.props.authenticated
+            /* SE AUTENTICATO RITORNA: */
+            ? <Button variant="outline" href="/logout" size="sm">
+            <img src={UserLogout} alt="Logout" width="25" height="25"/>
+            </Button>              
+            /* ALTRIMENTI RITORNA: */
+            : null
+            }
             </Form>
           </Navbar>
         );
