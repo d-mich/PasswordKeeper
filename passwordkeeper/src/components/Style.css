@@ -5,6 +5,14 @@
     background-color: #515A5A;
 }
 
+/* HEADER */
+.dropdown-menu {
+    width: 10px !important;
+    height: 80px !important;
+    top: 34;
+    left: 0;
+    background-color: #515A5A;
+}
 
 /* FOOTER */
 .footer-copyright {
