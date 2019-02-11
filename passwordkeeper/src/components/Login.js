@@ -1,6 +1,5 @@
 import React, { Component } from 'react';
 import { Redirect } from 'react-router-dom';
-import { Toaster, Intent} from '@blueprintjs/core';
 import { fire, providerGoogle, providerFacebook } from '../config/Fire';
 import { Button, Form } from 'react-bootstrap';
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
@@ -24,7 +23,7 @@ class Login extends Component{
         fire.auth().signInWithPopup(providerGoogle)
           .then((user, error) => {
             if (error) {    //autenticazione fallita
-              this.toaster.show({ intent: Intent.DANGER, message: "Unable to sign in with Google" })
+              /* this.toaster.show({ intent: Intent.DANGER, message: "Unable to sign in with Google" }) */
             } else {    //autenticazione corretta
                 console.log("autenticazione google");
               this.setState({ 
@@ -39,7 +38,7 @@ class Login extends Component{
         fire.auth().signInWithPopup(providerFacebook)
           .then((user, error) => {
             if (error) {
-              this.toaster.show({ intent: Intent.DANGER, message: "Unable to sign in with Facebook" })
+              /* this.toaster.show({ intent: Intent.DANGER, message: "Unable to sign in with Facebook" }) */
             } else {
                 console.log("autenticazione facebook");
               this.props.setCurrentUser(user)
@@ -62,7 +61,7 @@ class Login extends Component{
             } else if (providers.indexOf("password") === -1) {
               // they used facebook
               this.loginForm.reset()
-              this.toaster.show({ intent: Intent.WARNING, message: "Try alternative login." })
+              /* this.toaster.show({ intent: Intent.WARNING, message: "Try alternative login." }) */
             } else {
               // sign user in
               return fire.auth().signInWithEmailAndPassword(email, password)

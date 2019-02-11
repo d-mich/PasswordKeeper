@@ -1,6 +1,6 @@
 import React, { Component } from 'react'
 import { Redirect } from 'react-router-dom'
-import { Spinner } from '@blueprintjs/core'
+import { RingLoader } from 'react-spinners';
 import { fire } from '../config/Fire';
 
 
@@ -28,7 +28,7 @@ class Logout extends Component {
     return (
       <div style={{ textAlign: "center", position: "absolute", top: "25%", left: "50%" }}>
         <h3>Logging Out</h3>
-        <Spinner />
+        <RingLoader />
       </div>
     )
   }

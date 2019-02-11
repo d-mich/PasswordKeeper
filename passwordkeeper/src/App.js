@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
-import { Spinner } from '@blueprintjs/core';
+import { RingLoader } from 'react-spinners';
 import './App.css';
 import  { fire } from './config/Fire';
 import Header from './components/Header';
@@ -58,7 +58,7 @@ class App extends Component {
       return (
         <div style={{ textAlign: "center", position: "absolute", top: "25%", left: "50%" }}>
           <h3>Loading</h3>
-          <Spinner />
+          <RingLoader />
         </div>
       )
     }
