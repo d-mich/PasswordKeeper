@@ -21,7 +21,7 @@ class Header extends Component {
         return (
           <div>
           <Navbar bg="dark" variant="dark">
-            <Navbar.Brand href="/home">Password Keeper</Navbar.Brand>
+            <Navbar.Brand href="/">Password Keeper</Navbar.Brand>
             <Nav className="mr-auto">
             </Nav>
             <Form inline>              

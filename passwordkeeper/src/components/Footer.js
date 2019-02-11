@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import Styles from './Style.css';
 
 class Footer extends Component {
   constructor(props) {
@@ -8,8 +9,8 @@ class Footer extends Component {
 
   render() {
     return (
-      <footer>
-        <ul className="site-link">
+      <footer className="footer-copyright">
+        <ul>
             &copy; {this.state.year} Password Keeper
         </ul>
       </footer>

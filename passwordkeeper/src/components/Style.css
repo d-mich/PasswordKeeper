@@ -1,0 +1,39 @@
+/* APP */
+.mainStyle {
+    max-width: 1160px;
+    margin: "0 auto";
+    background-color: #515A5A;
+}
+
+
+/* FOOTER */
+.footer-copyright {
+    color: white;
+    position: fixed;
+    bottom: 0;
+}
+
+/* WELCOME */
+.welcomeText {
+    color: white;
+    text-align: center;
+}
+
+/* LOGIN */
+.loginStyle {
+    margin: auto;
+    width: 50%;
+    border: 3px;
+    padding: 10px;
+    color: white;
+}
+
+.signUPButton {
+    text-align: center;
+}
+
+/* ERROR */
+.errorText {
+    text-align: center;
+    color: white;
+}

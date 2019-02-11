@@ -4,15 +4,7 @@ import { Toaster, Intent} from '@blueprintjs/core';
 import { fire, providerGoogle, providerFacebook } from '../config/Fire';
 import { Button, Form } from 'react-bootstrap';
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
-
-const loginStyles = {
-    width: "90%",
-    maxWidth: "315px",
-    margin: "20px auto",
-    border: "1px solid #ddd",
-    borderRadius: "5px",
-    padding: "10px"
-  }
+import Styles from './Style.css';
 
 class Login extends Component{
 
@@ -99,14 +91,11 @@ class Login extends Component{
 
         //redirect: default (false)
         return (
-          <div style={loginStyles}>
+          <div className="loginStyle">
             <Form onSubmit={(event) => { this.authWithEmailPassword(event) }} ref={(form) => { this.loginForm = form }}>
             <Form.Group controlId="formBasicEmail">
               <Form.Label>Email address</Form.Label>
               <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
-              <Form.Text className="text-muted">
-                We'll never share your email with anyone else.
-              </Form.Text>
             </Form.Group>
 
             <Form.Group controlId="formBasicPassword">
@@ -114,11 +103,12 @@ class Login extends Component{
               <Form.Control type="password" placeholder="Password" ref={(input) => { this.passwordInput = input }}/>
             </Form.Group>
             <Form.Group controlId="formBasicChecbox">
-              <Form.Check type="checkbox" label="Check me out" />
             </Form.Group>
-            <Button variant="dark" type="submit">
-              Submit
+            <div className="signUPButton">
+            <Button variant="outline-light" type="submit" href='/profile'>
+              Sign Up
             </Button>
+            </div>            
           </Form>
           <br></br>
           <FacebookLoginButton onClick={() => { this.authWithFacebook() }} />

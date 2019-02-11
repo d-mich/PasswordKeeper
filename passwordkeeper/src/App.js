@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { BrowserRouter, Route, Redirect } from 'react-router-dom';
+import { BrowserRouter, Route, Redirect, Switch } from 'react-router-dom';
 import { Spinner } from '@blueprintjs/core';
 import './App.css';
 import  { fire } from './config/Fire';
@@ -7,6 +7,19 @@ import Header from './components/Header';
 import Login from './components/Login';
 import Logout from './components/Logout';
 import Footer from './components/Footer';
+import Welcome from './components/Welcome';
+import Profile from './components/Profile';
+import Error from './components/Error';
+
+function AuthenticatedRoute ({component: Compomponent, authenticated, ...rest}) {
+  return (
+    <Route
+    {...rest}
+    render={(props) => authenticated === true 
+      ? <Compomponent {...props} {...rest} />
+      : <Redirect to='/login'/> } />
+  )
+}
 
 class App extends Component {
 
@@ -51,22 +64,33 @@ class App extends Component {
     }
 
     return (
-      <div style={{maxWidth: "1160px", margin: "0 auto"}}>
+      <div className="mainStyle">
+      <style>{'body { background-color: #515A5A; }'}</style>
         <BrowserRouter>
           <div>
-            {/* PASSO LA VARIABILE AUTENTICATED AD HEADER */}
-            <Header addSong={this.addSong} authenticated={this.state.authenticated} />
-            <div className="main-content" style={{padding: "1em"}}>
-              <div className="workspace">
-                <Route exact path="/login" render={(props) => {
+            {/* HEADER passando la variabile authenticated */}
+            <Header authenticated={this.state.authenticated} />  
+          <Switch>
+            {/* CREO TUTTI I PATH */}
+
+            <Route exact path="/" component={Welcome}/>
+
+            <Route exact path="/login" render={(props) => {
                   return <Login setCurrentUser={this.setCurrentUser} {...props} />
                 }} />
-                {/* compontent=Logout se scritto come route restituisce la pagina logout */}
-                <Route exact path="/logout" component={Logout} />
-              </div>
-            </div>
+
+            <Route exact path="/logout" component={Logout} />
+
+            <AuthenticatedRoute
+            exact path="/profile"
+            authenticated={this.state.authenticated}
+            component={Profile}/>
+
+            {/* ROUTE NON PRESENTE: ERRORE */}
+            <Route component={Error} />
+            </Switch>
           </div>
-        </BrowserRouter>
+        </BrowserRouter>    
         <Footer />
       </div>
     );
