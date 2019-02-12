@@ -32,7 +32,7 @@ class Header extends Component {
             /* SE AUTENTICATO RITORNA: */
             ? <Button variant="outline" href="/logout" size="sm">
             <img src={UserLogout} alt="Logout" width="25" height="25"/>
-            </Button>              
+            </Button>        
             /* ALTRIMENTI RITORNA: */
             : null
             }

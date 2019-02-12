@@ -5,6 +5,7 @@ import { Button, Form } from 'react-bootstrap';
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 import Styles from './Style.css';
 import FacebookLogin from 'react-facebook-login';
+import App from '../App';
 
 class Login extends Component{
 
@@ -24,6 +25,10 @@ class Login extends Component{
           ma se viene messo a true verremo reindirizzati in un altra parte */
         }
         
+      }
+
+      authenticatedTrue = () => {
+        this.props.setAuthenticatedTrue()
       }
 
       authWithGoogle() {
@@ -110,6 +115,7 @@ class Login extends Component{
         email: response.email,
         picture: response.picture.data.url
       });
+      this.authenticatedTrue();
     }
 
     componentClicked = () => console.log('clicked');
@@ -137,7 +143,7 @@ class Login extends Component{
           fbContent =(
             <FacebookLogin
               appId="2655444627828934"
-              autoLoad={true}
+              autoLoad={false}
               fields="name,email,picture"
               onClick={this.componentClicked}
               callback={this.responseFacebook} />

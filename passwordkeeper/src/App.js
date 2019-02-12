@@ -23,14 +23,19 @@ function AuthenticatedRoute ({component: Compomponent, authenticated, ...rest}) 
 
 class App extends Component {
 
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
       authenticated: false,
       currentUser: null,
       loading: true,
     };
   }
+
+  setAuthenticatedTrue = () => {
+    this.setState({
+      authenticated: true
+    })}
 
   componentWillMount() {
     this.removeAuthListener = fire.auth().onAuthStateChanged((user) => {
@@ -76,9 +81,9 @@ class App extends Component {
 
             <Route exact path="/" component={Welcome}/>
 
-            <Route exact path="/login" render={(props) => {
-                  return <Login setCurrentUser={this.setCurrentUser} {...props} />
-                }} />
+            <Route exact path="/login" render={() => 
+                  <Login setAuthenticatedTrue={this.setAuthenticatedTrue} />
+                } />
 
             <Route exact path="/logout" component={Logout} />
 
