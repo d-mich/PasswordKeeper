@@ -13,6 +13,10 @@ class Login extends Component{
         this.authWithFacebook = this.authWithFacebook.bind(this)
         this.authWithEmailPassword = this.authWithEmailPassword.bind(this)
         this.state = {
+          userID: '',
+          name: '',
+          email: '',
+          picture: '',
           redirect: false
           /* di default non si reindirizza (false) 
           ma se viene messo a true verremo reindirizzati in un altra parte */
@@ -36,15 +40,30 @@ class Login extends Component{
 
       authWithFacebook() {
         fire.auth().signInWithPopup(providerFacebook)
-          .then((user, error) => {
-            if (error) {
-              /* this.toaster.show({ intent: Intent.DANGER, message: "Unable to sign in with Facebook" }) */
-            } else {
-                console.log("autenticazione facebook");
-              this.props.setCurrentUser(user)
-              this.setState({ redirect: true })
+          .then((result, error) => {
+            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
+            var token = result.credential.accessToken;
+            // The signed-in user info.
+            var user = result.user;
+            console.log("AUTENTICATO CON FACEBOOK");
+            console.log(result.user);
+            this.setState ({
+              userID: result.user.displayName,
+              email: result.user.email,
+              picture: result.user.photoURL,
+            })
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            if(error.code === 'auth/account-exists-with-different-credential') {
+              console.log("utente già autenticato con questa mail");
             }
-          })
+          });
       }
     
       authWithEmailPassword(event) {
@@ -80,7 +99,11 @@ class Login extends Component{
           })
       }
 
+    responseFacebook = response => {
+      console.log(response);
+    }
 
+    componentClicked = () => console.log('clicked');
 
     render() {
         //redirect: root
@@ -112,9 +135,8 @@ class Login extends Component{
           <br></br>
           <FacebookLoginButton onClick={() => { this.authWithFacebook() }} />
           <GoogleLoginButton onClick={() => { this.authWithGoogle() }} />
-      </div>
-          
-        )
+        </div>   
+        );
     }
 }
 

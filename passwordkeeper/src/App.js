@@ -9,7 +9,7 @@ import Logout from './components/Logout';
 import Footer from './components/Footer';
 import Welcome from './components/Welcome';
 import Profile from './components/Profile';
-import Error from './components/Error';
+import Popup from './components/Popup';
 
 function AuthenticatedRoute ({component: Compomponent, authenticated, ...rest}) {
   return (
@@ -66,6 +66,7 @@ class App extends Component {
     return (
       <div className="mainStyle">
       <style>{'body { background-color: #515A5A; }'}</style>
+      <Popup />
         <BrowserRouter>
           <div>
             {/* HEADER passando la variabile authenticated */}
