@@ -6,6 +6,7 @@ import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-butto
 import Styles from './Style.css';
 import FacebookLogin from 'react-facebook-login';
 import App from '../App';
+import { timingSafeEqual } from 'crypto';
 
 class Login extends Component{
 
@@ -27,10 +28,6 @@ class Login extends Component{
         
       }
 
-      authenticatedTrue = () => {
-        this.props.setAuthenticatedTrue()
-      }
-
       authWithGoogle() {
         fire.auth().signInWithPopup(providerGoogle)
           .then((user, error) => {
@@ -38,12 +35,28 @@ class Login extends Component{
               /* this.toaster.show({ intent: Intent.DANGER, message: "Unable to sign in with Google" }) */
             } else {    //autenticazione corretta
                 console.log("autenticazione google");
-              this.setState({ 
-                redirect: true,
-                user
-            }) //redirect
+                this.setState({ 
+                 /*  redirect: true, */
+                  user
+              }) //redirect
+              //this.writeUserData(fire.auth().currentUser, 'diego@gmail.com', 'diego', 'miccio')
+              
+              //get user's info
+              this.writeUserData(JSON.parse( JSON.stringify(fire.auth().currentUser.uid)),
+              JSON.parse( JSON.stringify(fire.auth().currentUser.email)),
+              JSON.parse( JSON.stringify(fire.auth().currentUser.displayName)),
+              'aaa'
+              )
             }
           })
+      }
+
+      getGoogleInfo() {
+        console.log("GOOGLE USER ID: "+
+              fire.auth().currentUser.uid + '/n' +
+              fire.auth().currentUser.email +
+              fire.auth().currentUser.name
+               )
       }
 
       authWithFacebook() {
@@ -54,6 +67,7 @@ class Login extends Component{
             // The signed-in user info.
             var user = result.user;
             console.log("AUTENTICATO CON FACEBOOK");
+            console.log("FACEBOOK USER ID: " + user)
             console.log(result.user);
             this.setState ({
               userID: result.user.displayName,
@@ -97,8 +111,9 @@ class Login extends Component{
           .then((user) => {
             if (user && user.email) {
                 console.log("autenticazione email");
+                console.log("EMAIL USER ID: " + user)
               this.loginForm.reset()
-              this.props.setCurrentUser(user)
+              this.props.set(user)
               this.setState({redirect: true})
             }
           })
@@ -115,8 +130,30 @@ class Login extends Component{
         email: response.email,
         picture: response.picture.data.url
       });
-      this.authenticatedTrue();
+      /* this.props.authenicated = true */
     }
+
+    writeUserData(userID, email,fname,lname){
+      fire.database().ref('users/' + userID).set({
+          email,
+          fname,
+          lname
+      }).then((data)=>{
+          //success callback
+          console.log('data ' , data)
+      }).catch((error)=>{
+          //error callback
+          console.log('error ' , error)
+      })
+    }
+
+    readUserData(userID) {
+      fire.database().ref('/users/' + userID).once('value')
+      .then(function (snapshot) {
+          console.log(snapshot.val())
+      });
+    }
+
 
     componentClicked = () => console.log('clicked');
 

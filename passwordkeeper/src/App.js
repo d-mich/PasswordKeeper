@@ -32,10 +32,18 @@ class App extends Component {
     };
   }
 
-  setAuthenticatedTrue = () => {
+  changeState() {
     this.setState({
-      authenticated: true
-    })}
+      authenticated :true
+    })
+  }
+
+  setUser(params) {
+    this.setState({
+      currentUser : params
+    })
+  }
+
 
   componentWillMount() {
     this.removeAuthListener = fire.auth().onAuthStateChanged((user) => {
@@ -81,7 +89,7 @@ class App extends Component {
             <Route exact path="/" component={Welcome}/>
 
             <Route exact path="/login" render={() => 
-                  <Login setAuthenticatedTrue={this.setAuthenticatedTrue} />
+                  <Login changeState={this.changeState.bind(this)} />
                 } />
 
             <Route exact path="/logout" component={Logout} />
