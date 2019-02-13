@@ -71,7 +71,6 @@ class App extends Component {
     return (
       <div className="mainStyle">
       <style>{'body { background-color: #515A5A; }'}</style>
-      <Popup />
         <BrowserRouter>
           <div>
             {/* HEADER passando la variabile authenticated */}
