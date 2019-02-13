@@ -16,11 +16,8 @@ class Login extends Component{
         this.authWithFacebook = this.authWithFacebook.bind(this)
         this.authWithEmailPassword = this.authWithEmailPassword.bind(this)
         this.state = {
+          user: null,
           isLoggedIn : false,
-          userID: '',
-          name: '',
-          email: '',
-          picture: '',
           redirect: false
           /* di default non si reindirizza (false) 
           ma se viene messo a true verremo reindirizzati in un altra parte */
@@ -42,21 +39,23 @@ class Login extends Component{
               //this.writeUserData(fire.auth().currentUser, 'diego@gmail.com', 'diego', 'miccio')
               
               //get user's info
-              this.writeUserData(JSON.parse( JSON.stringify(fire.auth().currentUser.uid)),
+              /* this.writeUserData(JSON.parse( JSON.stringify(fire.auth().currentUser.uid)),
               JSON.parse( JSON.stringify(fire.auth().currentUser.email)),
               JSON.parse( JSON.stringify(fire.auth().currentUser.displayName)),
               'aaa'
-              )
+              ) */
+
+              //set authenticated true
+              this.props.setAuthenticated(true)
+              this.getGoogleInfo()
             }
           })
       }
 
       getGoogleInfo() {
-        console.log("GOOGLE USER ID: "+
-              fire.auth().currentUser.uid + '/n' +
-              fire.auth().currentUser.email +
-              fire.auth().currentUser.name
-               )
+        //set user id
+        this.props.setUserId(JSON.parse(JSON.stringify(fire.auth().currentUser.uid)))
+        this.props.setName(JSON.parse(JSON.stringify(fire.auth().currentUser.displayName)))
       }
 
       authWithFacebook() {
@@ -158,6 +157,7 @@ class Login extends Component{
     componentClicked = () => console.log('clicked');
 
     render() {
+      /* this.getGoogleInfo() */
       let fbContent;
         //redirect: root
         if(this.state.redirect === true) {
@@ -204,13 +204,13 @@ class Login extends Component{
             </Form.Group>
             <div className="signUPButton">
             <Button variant="outline-light" type="submit" href='/profile'>
-              Sign Up
+              Accedi
             </Button>
             </div>            
           </Form>
           <br></br>
-          <FacebookLoginButton onClick={() => { this.authWithFacebook() }} />
-          <GoogleLoginButton onClick={() => { this.authWithGoogle() }} />
+          <FacebookLoginButton onClick={() => { this.authWithFacebook() }}>Accedi con Facebook</FacebookLoginButton>
+          <GoogleLoginButton onClick={() => { this.authWithGoogle() }}>Accedi con Google</GoogleLoginButton>
         
           {fbContent}
         </div>   

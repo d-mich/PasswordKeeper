@@ -19,7 +19,6 @@ class Header extends Component {
     }
 
     render() {
-      console.log('LOGGED: '+this.props.authenticated);
         return (
           <Navbar bg="dark" variant="dark">
             <Navbar.Brand href="/">Password Keeper</Navbar.Brand>

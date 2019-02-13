@@ -9,7 +9,6 @@ import Logout from './components/Logout';
 import Footer from './components/Footer';
 import Welcome from './components/Welcome';
 import Profile from './components/Profile';
-import Popup from './components/Popup';
 
 function AuthenticatedRoute ({component: Compomponent, authenticated, ...rest}) {
   return (
@@ -23,25 +22,36 @@ function AuthenticatedRoute ({component: Compomponent, authenticated, ...rest}) 
 
 class App extends Component {
 
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
     this.state = {
-      authenticated: false,
-      currentUser: null,
-      loading: true,
-    };
+        authenticated: false,
+        loading: true,
+        userID: null,
+        name: null,
+        picture: null
+    }
+    this.setAuthenticated = this.setAuthenticated.bind(this)
+    this.setUserId = this.setUserId.bind(this)
+    this.setName = this.setName.bind(this)
   }
 
-  changeState() {
+  setAuthenticated(param) {
     this.setState({
-      authenticated :true
-    })
+      authenticated : param
+    });
+  }
+  
+  setUserId(param) {
+    this.setState({
+      userID : param
+    });
   }
 
-  setUser(params) {
+  setName(param) {
     this.setState({
-      currentUser : params
-    })
+      name : param
+    });
   }
 
 
@@ -76,6 +86,10 @@ class App extends Component {
       )
     }
 
+    console.log('AUTHENTICATED: '+this.state.authenticated)
+    console.log('USER ID: '+this.state.userID)
+    console.log('USER NAME: '+this.state.name)
+
     return (
       <div className="mainStyle">
       <style>{'body { background-color: #515A5A; }'}</style>
@@ -89,7 +103,9 @@ class App extends Component {
             <Route exact path="/" component={Welcome}/>
 
             <Route exact path="/login" render={() => 
-                  <Login changeState={this.changeState.bind(this)} />
+                  <Login setAuthenticated={this.setAuthenticated}
+                  setUserId={this.setUserId}
+                  setName={this.setName} />
                 } />
 
             <Route exact path="/logout" component={Logout} />
