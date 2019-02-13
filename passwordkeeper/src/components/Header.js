@@ -13,6 +13,7 @@ class Header extends Component {
         }
       }
     
+      
     closePopover() {
       this.setState({ popoverOpen: false })
     }
