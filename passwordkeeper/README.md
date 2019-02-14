@@ -80,3 +80,6 @@ aggiungere poi a index.html
 ### 'npm i react-icons'
 https://react-icons.netlify.com/#/icons/fa1
 
+-----font awesome-----
+https://fontawesome.com/icons?d=gallery
+### 'npm install --save font-awesome'

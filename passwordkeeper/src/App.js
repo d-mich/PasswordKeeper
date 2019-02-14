@@ -110,7 +110,7 @@ class App extends Component {
             {/* CREO TUTTI I PATH */}
 
             <Route exact path="/" component={Welcome}/>
-
+      
             <Route exact path="/login" render={(props) => 
                   <Login setAuthenticated={this.setAuthenticated}
                   setUserId={this.setUserId}

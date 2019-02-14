@@ -9,10 +9,26 @@
 .dropdown-menu {
     width: 10px !important;
     height: 80px !important;
-    top: 34;
-    left: 0;
-    background-color: #515A5A;
+    margin-right: 120px; 
+    margin-top: 10px;
+    background-color: #343A40;
 }
+
+
+.fa-cog {
+    color: white;
+    margin-right: 10px;
+}
+
+.fa-user {
+    color: white;
+    margin-right: 10px;
+}
+
+.dropdownHeader {
+    color: white;
+}
+
 
 /* FOOTER */
 .footer-copyright {
@@ -46,6 +62,8 @@
     background-repeat:no-repeat;
     border: none;
     color: white;
+    /* padding values are for top right bottom left */
+    padding: 7px 50px 8px 1px;;
 }
 
 /* ERROR */
