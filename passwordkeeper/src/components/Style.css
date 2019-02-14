@@ -41,8 +41,21 @@
     text-align: center;
 }
 
+.buttonFacebook {
+    background-color: transparent;
+    background-repeat:no-repeat;
+    border: none;
+    color: white;
+}
+
 /* ERROR */
 .errorText {
     text-align: center;
     color: white;
 }
+
+.defaultImage {
+    width: 30;
+    height: 30;
+} 
+

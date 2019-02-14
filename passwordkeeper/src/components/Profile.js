@@ -2,8 +2,8 @@ import React, { Component } from 'react';
 import { fire } from '../config/Fire';
  
 class Profile extends Component {
-  constructor(props) {
-    super(props);
+  constructor() {
+    super();
   }
 
   writeUserData(userID, email,fname,lname){
@@ -38,13 +38,16 @@ class Profile extends Component {
   }
 
   render() {
-    console.log('Reading user data')
-    this.readUserData('002')
     return (
      <div className="welcomeText">
-         <h1>Pagina personale di {this.props.user}</h1>
+         <h1>Pagina personale di {this.props.name}</h1>
+         <p>ID: {this.props.userID}</p>
          
-
+        <p>Account salvati:</p>
+        <div>        
+  
+          <input type="password" id="pwd" placeholder="Password"></input>
+        </div>
      </div>
     );
   }

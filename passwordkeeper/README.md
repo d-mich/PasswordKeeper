@@ -74,3 +74,9 @@ aggiungere poi a index.html
 
 -----aggiunta login facebook e google-----
 ### 'npm i react-social-login-buttons'
+
+
+-----Aggiunta icone-----
+### 'npm i react-icons'
+https://react-icons.netlify.com/#/icons/fa1
+

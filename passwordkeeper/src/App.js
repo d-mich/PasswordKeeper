@@ -34,6 +34,7 @@ class App extends Component {
     this.setAuthenticated = this.setAuthenticated.bind(this)
     this.setUserId = this.setUserId.bind(this)
     this.setName = this.setName.bind(this)
+    this.setPicture = this.setPicture.bind(this)
   }
 
   setAuthenticated(param) {
@@ -51,6 +52,12 @@ class App extends Component {
   setName(param) {
     this.setState({
       name : param
+    });
+  }
+
+  setPicture(param) {
+    this.setState({
+      picture : param
     });
   }
 
@@ -89,6 +96,7 @@ class App extends Component {
     console.log('AUTHENTICATED: '+this.state.authenticated)
     console.log('USER ID: '+this.state.userID)
     console.log('USER NAME: '+this.state.name)
+    console.log('USER NAME: '+this.state.picture)
 
     return (
       <div className="mainStyle">
@@ -96,16 +104,19 @@ class App extends Component {
         <BrowserRouter>
           <div>
             {/* HEADER passando la variabile authenticated */}
-            <Header authenticated={this.state.authenticated} />  
+            <Header authenticated={this.state.authenticated} 
+                    picture={this.state.picture}/>  
           <Switch>
             {/* CREO TUTTI I PATH */}
 
             <Route exact path="/" component={Welcome}/>
 
-            <Route exact path="/login" render={() => 
+            <Route exact path="/login" render={(props) => 
                   <Login setAuthenticated={this.setAuthenticated}
                   setUserId={this.setUserId}
-                  setName={this.setName} />
+                  setName={this.setName} 
+                  setPicture={this.setPicture}
+                  {...props}/> //per history.push
                 } />
 
             <Route exact path="/logout" component={Logout} />
@@ -113,6 +124,8 @@ class App extends Component {
             <AuthenticatedRoute
             exact path="/profile"
             authenticated={this.state.authenticated}
+            userID={this.state.userID}
+            name={this.state.name}
             component={Profile}/>
 
             {/* ROUTE NON PRESENTE: ERRORE */}

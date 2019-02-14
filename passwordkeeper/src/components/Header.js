@@ -26,13 +26,16 @@ class Header extends Component {
             </Nav>
             <Form inline> 
             <Button variant="outline" href="/login" size="sm">
-              <img src={UserLogin} alt="Login" width="30" height="30"/>
+              {this.props.authenticated
+              ? <img src={this.props.picture} alt="Login" width="30" height="30" />
+              : <img src={UserLogin} alt="Login" width="30" height="30"/>
+              }              
             </Button>
             {this.props.authenticated
             /* SE AUTENTICATO RITORNA: */
             ? <Button variant="outline" href="/logout" size="sm">
-            <img src={UserLogout} alt="Logout" width="25" height="25"/>
-            </Button>        
+                <img src={UserLogout} alt="Logout" width="25" height="25"/>
+              </Button>      
             /* ALTRIMENTI RITORNA: */
             : null
             }

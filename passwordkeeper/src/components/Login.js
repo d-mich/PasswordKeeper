@@ -4,7 +4,7 @@ import { fire, providerGoogle, providerFacebook } from '../config/Fire';
 import { Button, Form } from 'react-bootstrap';
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
 import Styles from './Style.css';
-import FacebookLogin from 'react-facebook-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props'
 import App from '../App';
 import { timingSafeEqual } from 'crypto';
 
@@ -21,8 +21,7 @@ class Login extends Component{
           redirect: false
           /* di default non si reindirizza (false) 
           ma se viene messo a true verremo reindirizzati in un altra parte */
-        }
-        
+        }        
       }
 
       authWithGoogle() {
@@ -34,7 +33,7 @@ class Login extends Component{
                 console.log("autenticazione google");
                 this.setState({ 
                  /*  redirect: true, */
-                  user
+                  user: fire.auth().currentUser
               }) //redirect
               //this.writeUserData(fire.auth().currentUser, 'diego@gmail.com', 'diego', 'miccio')
               
@@ -47,15 +46,17 @@ class Login extends Component{
 
               //set authenticated true
               this.props.setAuthenticated(true)
-              this.getGoogleInfo()
+              this.setUserInfo()
+              this.props.history.push('/profile')
+              
             }
           })
       }
 
-      getGoogleInfo() {
-        //set user id
-        this.props.setUserId(JSON.parse(JSON.stringify(fire.auth().currentUser.uid)))
-        this.props.setName(JSON.parse(JSON.stringify(fire.auth().currentUser.displayName)))
+      setUserInfo() {
+        this.props.setUserId(JSON.parse(JSON.stringify(this.state.user.uid)))
+        this.props.setName(JSON.parse(JSON.stringify(this.state.user.displayName)))
+        this.props.setPicture(JSON.parse(JSON.stringify(this.state.user.photoURL)))
       }
 
       authWithFacebook() {
@@ -69,10 +70,13 @@ class Login extends Component{
             console.log("FACEBOOK USER ID: " + user)
             console.log(result.user);
             this.setState ({
-              userID: result.user.displayName,
-              email: result.user.email,
-              picture: result.user.photoURL,
+              user: result.user
             })
+            
+            /* this.props.setAuthenticated(true)
+            this.setUserInfo()
+            this.props.history.push('/profile') */
+
           }).catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
@@ -121,17 +125,6 @@ class Login extends Component{
           })
       }
 
-    responseFacebook = response => {
-      this.setState ({
-        isLoggedIn: true,
-        userID: response.userID,
-        name: response.name,
-        email: response.email,
-        picture: response.picture.data.url
-      });
-      /* this.props.authenicated = true */
-    }
-
     writeUserData(userID, email,fname,lname){
       fire.database().ref('users/' + userID).set({
           email,
@@ -153,8 +146,25 @@ class Login extends Component{
       });
     }
 
+    responseFacebook = response => {
+      this.setState ({
+        isLoggedIn: true,
+        /* userID: response.userID,
+        name: response.name,
+        email: response.email,
+        picture: response.picture.data.url */
+        user: response
+      });
+      this.props.setAuthenticated(true)
+      this.setFacebookUser()
+      this.props.history.push('/profile')
+    }
 
-    componentClicked = () => console.log('clicked');
+    setFacebookUser() {
+      this.props.setUserId(JSON.parse(JSON.stringify(this.state.user.userID)))
+      this.props.setName(JSON.parse(JSON.stringify(this.state.user.name)))
+      this.props.setPicture(JSON.parse(JSON.stringify(this.state.user.picture.data.url)))
+    }
 
     render() {
       /* this.getGoogleInfo() */
@@ -171,19 +181,21 @@ class Login extends Component{
               margin: 'auto',
               padding: '20px'
             }}>
-            <img src={this.state.picture} alt={this.state.name} />
-            <h2>Benvenuto {this.state.name}</h2>
-            email: {this.state.email}
             </div>
           )
         } else {
           fbContent =(
-            <FacebookLogin
+            <FacebookLoginButton>
+              <FacebookLogin className="facebookButton"
               appId="2655444627828934"
               autoLoad={false}
               fields="name,email,picture"
-              onClick={this.componentClicked}
-              callback={this.responseFacebook} />
+              callback={this.responseFacebook}
+              render={renderProps => (
+                <button className="buttonFacebook"onClick={renderProps.onClick}>Accedi con Facebook</button>
+              )}         
+              />
+            </FacebookLoginButton>            
           );
         }
 
@@ -209,10 +221,9 @@ class Login extends Component{
             </div>            
           </Form>
           <br></br>
-          <FacebookLoginButton onClick={() => { this.authWithFacebook() }}>Accedi con Facebook</FacebookLoginButton>
-          <GoogleLoginButton onClick={() => { this.authWithGoogle() }}>Accedi con Google</GoogleLoginButton>
-        
+          {/* <FacebookLoginButton onClick={() => { this.authWithFacebook() }}>Accedi con Facebook</FacebookLoginButton> */}
           {fbContent}
+          <GoogleLoginButton onClick={() => { this.authWithGoogle() }}>Accedi con Google</GoogleLoginButton>
         </div>   
         );
     }
