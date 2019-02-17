@@ -77,3 +77,11 @@
     height: 30;
 } 
 
+/* PROFILE */
+.nuovoAccountStyle {
+    margin: auto;
+    margin-top: 30px;
+    width: 80%;
+    border: 10px;
+    color: white;
+}
