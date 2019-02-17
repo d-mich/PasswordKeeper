@@ -27,13 +27,9 @@ class Profile extends Component {
     })
   }
 
-  readUserData() {
-    /* fire.database().ref('/users/' + userID).once('value')
-    .then(function (snapshot) {
-        console.log(snapshot.val())
-    }); */
+  readUserData(userID) {
     const rootRef = fire.database().ref();
-    const user = rootRef.child('users/I7SN4L1ibiPYbnkiOFKlMgclmu53')
+    const user = rootRef.child('users/'+userID)
 
     user.once('value', snap => {
       snap.forEach(child => {
@@ -77,10 +73,6 @@ class Profile extends Component {
   }
 
   writeUserData(userID, acc, us, pwd){
-    /* fire.database().ref('users/' + userID).set({
-      account: acc,
-      password: pwd
-    }); */
     fire.database().ref('users/' + userID +'/'+ acc).set({
       username: us,
       password: pwd
@@ -96,15 +88,14 @@ class Profile extends Component {
     const usernameNuovo = this.accountInput.value
     const passwordNuovo = this.passwordInput.value
 
-    this.loginForm.reset();
+    this.accountForm.reset();
 
     this.writeUserData(this.props.userID, accountNuovo, usernameNuovo, passwordNuovo)
-
+    //this.readUserData(this.props.userID)
   }
 
   componentDidMount() {
-    this.writeUserData(this.props.userID, 'twitter', 'abc', 'pwd')
-    this.readUserData()
+    this.readUserData(this.props.userID)
   }
 
   render() {
