@@ -7,26 +7,29 @@
 
 /* HEADER */
 .dropdown-menu {
-    width: 10px !important;
-    height: 80px !important;
-    margin-right: 120px; 
+    width: 200px;
+    height: 115px;
+    margin-right: 150px; 
     margin-top: 10px;
     background-color: #343A40;
 }
 
-
-.fa-cog {
-    color: white;
-    margin-right: 10px;
+.immagineUtente {
+    width: 30px;
+    height: 30px;
+    border-radius: 20px
 }
 
-.fa-user {
-    color: white;
+.iconeDropdown {
     margin-right: 10px;
 }
 
 .dropdownHeader {
     color: white;
+}
+
+.dropdown-toggle::after {
+    display: none;
 }
 
 

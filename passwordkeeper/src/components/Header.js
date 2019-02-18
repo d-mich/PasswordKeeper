@@ -1,25 +1,19 @@
 import React, { Component } from 'react';
 import {Navbar, Nav, Form, Dropdown, Button, ButtonGroup, DropdownButton } from 'react-bootstrap';
 import UserLogin from '../user-login.png';
-import UserLogout from '../user-logout.png';
-import bootstrap from 'react-bootstrap';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
-import 'font-awesome/css/font-awesome.min.css';
+import { FiMenu, FiInfo, FiTrash2, FiLogOut } from 'react-icons/fi';
+import Delete from './Delete';
 
 class Header extends Component {
 
-    constructor(props) {
-        super(props)
-        this.closePopover = this.closePopover.bind(this)
-        this.state = {
-          popoverOpen: false
-        }
+    constructor() {
+        super()
       }
-    
-      
-    closePopover() {
-      this.setState({ popoverOpen: false })
-    }
+
+      openModal() {
+        return <Delete/>
+      }
 
     render() {
         return (
@@ -29,26 +23,32 @@ class Header extends Component {
             <Form inline>             
               {this.props.authenticated
               ? <Button variant="outline" href="/profile" size="sm">
-                  <img src={this.props.picture} alt="UserPicture" width="30" height="30" />
+                  <img className="immagineUtente" src={this.props.picture} alt="UserPicture"/>
                 </Button>
-              : <Button variant="outline" href="/login" size="sm">
-                  <img src={UserLogin} alt="Login" width="30" height="30" />
+              : <Button variant="outline" href="/login" size="sm" onClick={this.openModal}>
+                  <img className="immagineUtente" src={UserLogin} alt="Login" />
                 </Button>
-              }  
+              }
               {this.props.authenticated
               /* SE AUTENTICATO RITORNA: */
               ? <Dropdown
                   variant="dark" >
-                  <Dropdown.Toggle split variant="dark" className="dropdown-split-basic">
-                  {/* <i className="fa fa-cog"></i> */}
+                  <Dropdown.Toggle variant="dark" className="dropdown-split-basic">
+                    <FiMenu/>                 
                   </Dropdown.Toggle>
                     <DropdownMenu className="dropdownMenu">
-                      <Dropdown.Item className="dropdownHeader" href="/impostazioni">
-                        <i className="fa fa-cog"></i>
-                        Impostazioni</Dropdown.Item>
+                      <Dropdown.Item className="dropdownHeader" href="/info">
+                        <FiInfo className="iconeDropdown"/>
+                        Info
+                      </Dropdown.Item>
+                      <Dropdown.Item className="dropdownHeader" href="/cancellazione">
+                        <FiTrash2 className="iconeDropdown"/>
+                        Cancella Account
+                      </Dropdown.Item>
                       <Dropdown.Item className="dropdownHeader" href="/logout">
-                        <i className="fa fa-user"></i>
-                        Logout</Dropdown.Item>
+                        <FiLogOut className="iconeDropdown"/>
+                        Logout
+                      </Dropdown.Item>                      
                     </DropdownMenu>                  
                 </Dropdown>
               /* ALTRIMENTI RITORNA: */

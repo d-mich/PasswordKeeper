@@ -11,10 +11,7 @@ import { timingSafeEqual } from 'crypto';
 class Login extends Component{
 
     constructor(props) {
-        super(props);
-        this.authWithGoogle = this.authWithGoogle.bind(this)
-        this.authWithFacebook = this.authWithFacebook.bind(this)
-        this.authWithEmailPassword = this.authWithEmailPassword.bind(this)
+        super(props);        
         this.state = {
           user: null,
           isLoggedIn : false,
@@ -22,62 +19,47 @@ class Login extends Component{
           /* di default non si reindirizza (false) 
           ma se viene messo a true verremo reindirizzati in un altra parte */
         }        
+        this.authWithGoogle = this.authWithGoogle.bind(this)
+        this.authWithFacebook = this.authWithFacebook.bind(this)
+        this.authWithEmailPassword = this.authWithEmailPassword.bind(this)
+        this.setUser = this.setUser.bind(this)
       }
 
-      authWithGoogle() {
-        fire.auth().signInWithPopup(providerGoogle)
-          .then((user, error) => {
-            if (error) {    //autenticazione fallita
-              /* this.toaster.show({ intent: Intent.DANGER, message: "Unable to sign in with Google" }) */
-            } else {    //autenticazione corretta
-                console.log("autenticazione google");
-                this.setState({ 
-                 /*  redirect: true, */
-                  user: fire.auth().currentUser
-              }) //redirect
-              //this.writeUserData(fire.auth().currentUser, 'diego@gmail.com', 'diego', 'miccio')
-              
-              //get user's info
-              /* this.writeUserData(JSON.parse( JSON.stringify(fire.auth().currentUser.uid)),
-              JSON.parse( JSON.stringify(fire.auth().currentUser.email)),
-              JSON.parse( JSON.stringify(fire.auth().currentUser.displayName)),
-              'aaa'
-              ) */
-
-              //set authenticated true
-              this.props.setAuthenticated(true)
-              this.setUserInfo()
-              this.props.history.push('/profile')
-              
-            }
-          })
+      setUser(currentUser) {
+        this.setState({
+          user: currentUser
+        })
       }
 
       setUserInfo() {
-        this.props.setUserId(JSON.parse(JSON.stringify(this.state.user.uid)))
+        /* this.props.setUserId(JSON.parse(JSON.stringify(this.state.user.uid)))
+        this.props.setEmail(JSON.parse(JSON.stringify(this.state.user.email)))
         this.props.setName(JSON.parse(JSON.stringify(this.state.user.displayName)))
-        this.props.setPicture(JSON.parse(JSON.stringify(this.state.user.photoURL)))
+        this.props.setPicture(JSON.parse(JSON.stringify(this.state.user.photoURL))) */
+        this.props.setLocalUser(
+          JSON.parse(JSON.stringify(this.state.user.uid)),
+          JSON.parse(JSON.stringify(this.state.user.email)),
+          JSON.parse(JSON.stringify(this.state.user.displayName)),
+          JSON.parse(JSON.stringify(this.state.user.photoURL))
+        )
+        this.props.setStateUser()
       }
 
-      authWithFacebook() {
-        fire.auth().signInWithPopup(providerFacebook)
-          .then((result, error) => {
-            // This gives you a Facebook Access Token. You can use it to access the Facebook API.
-            var token = result.credential.accessToken;
-            // The signed-in user info.
-            var user = result.user;
-            console.log("AUTENTICATO CON FACEBOOK");
-            console.log("FACEBOOK USER ID: " + user)
-            console.log(result.user);
-            this.setState ({
-              user: result.user
-            })
-            
-            /* this.props.setAuthenticated(true)
+      authentication(provider) {
+        fire.auth().signInWithPopup(provider)
+          .then((result) => {
+            console.log("autenticazione "+"");                
+            //set user state
+            this.setUser(result.user)                
+            //set authenticated true
+            this.props.setAuthenticated(true)
+            //set user info
             this.setUserInfo()
-            this.props.history.push('/profile') */
 
-          }).catch(function(error) {
+            //redirect
+            this.props.history.push('/profile')   
+          })
+          .catch(function(error) {
             // Handle Errors here.
             var errorCode = error.code;
             var errorMessage = error.message;
@@ -85,6 +67,58 @@ class Login extends Component{
             var email = error.email;
             // The firebase.auth.AuthCredential type that was used.
             var credential = error.credential;
+            /* if(error.code === 'auth/account-exists-with-different-credential') {
+              console.log("utente già autenticato con questa mail");
+            } */
+          });
+      }
+
+      authWithGoogle() {
+        fire.auth().signInWithPopup(providerGoogle)
+          .then((result) => {
+            console.log("autenticazione google");                
+            //set user state
+            this.setUser(result.user)                
+            //set authenticated true
+            this.props.setAuthenticated(true)
+            //set user info
+            this.setUserInfo()
+            //redirect
+            this.props.history.push('/profile')   
+          })
+          .catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
+            var email = error.email;
+            // The firebase.auth.AuthCredential type that was used.
+            var credential = error.credential;
+            if(error.code === 'auth/account-exists-with-different-credential') {
+              console.log("utente già autenticato con questa mail");
+            }
+          });
+      }
+
+      authWithFacebook() {
+        fire.auth().signInWithPopup(providerFacebook)
+          .then((result) => {
+            // This gives you a Google Access Token. You can use it to access the Google API.
+            var token = result.credential.accessToken;
+            console.log("autenticazione google");                
+            //set user state
+            this.setUser(result.user)                
+            //set authenticated true
+            this.props.setAuthenticated(true)
+            //set user info
+            this.setUserInfo()
+            //redirect
+            this.props.history.push('/profile')           
+          }).catch(function(error) {
+            // Handle Errors here.
+            var errorCode = error.code;
+            var errorMessage = error.message;
+            // The email of the user's account used.
             if(error.code === 'auth/account-exists-with-different-credential') {
               console.log("utente già autenticato con questa mail");
             }
@@ -146,57 +180,10 @@ class Login extends Component{
       });
     }
 
-    responseFacebook = response => {
-      this.setState ({
-        isLoggedIn: true,
-        /* userID: response.userID,
-        name: response.name,
-        email: response.email,
-        picture: response.picture.data.url */
-        user: response
-      });
-      this.props.setAuthenticated(true)
-      this.setFacebookUser()
-      this.props.history.push('/profile')
-    }
-
-    setFacebookUser() {
-      this.props.setUserId(JSON.parse(JSON.stringify(this.state.user.userID)))
-      this.props.setName(JSON.parse(JSON.stringify(this.state.user.name)))
-      this.props.setPicture(JSON.parse(JSON.stringify(this.state.user.picture.data.url)))
-    }
-
     render() {
-      /* this.getGoogleInfo() */
-      let fbContent;
         //redirect: root
         if(this.state.redirect === true) {
             return <Redirect to='/'/>
-        }
-
-        if (this.state.isLoggedIn) {
-          fbContent = (
-            <div style={{
-              width: '400px',
-              margin: 'auto',
-              padding: '20px'
-            }}>
-            </div>
-          )
-        } else {
-          fbContent =(
-            <FacebookLoginButton>
-              <FacebookLogin className="facebookButton"
-              appId="2655444627828934"
-              autoLoad={false}
-              fields="name,email,picture"
-              callback={this.responseFacebook}
-              render={renderProps => (
-                <button className="buttonFacebook"onClick={renderProps.onClick}>Accedi con Facebook</button>
-              )}         
-              />
-            </FacebookLoginButton>            
-          );
         }
 
         //redirect: default (false)
@@ -221,9 +208,8 @@ class Login extends Component{
             </div>            
           </Form>
           <br></br>
-          {/* <FacebookLoginButton onClick={() => { this.authWithFacebook() }}>Accedi con Facebook</FacebookLoginButton> */}
-          {fbContent}
-          <GoogleLoginButton onClick={() => { this.authWithGoogle() }}>Accedi con Google</GoogleLoginButton>
+          <FacebookLoginButton onClick={() => { this.authentication(providerFacebook) }}>Accedi con Facebook</FacebookLoginButton>
+          <GoogleLoginButton onClick={() => { this.authentication(providerGoogle) }}>Accedi con Google</GoogleLoginButton>
         </div>   
         );
     }

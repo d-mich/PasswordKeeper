@@ -9,12 +9,13 @@ import Logout from './components/Logout';
 import Footer from './components/Footer';
 import Welcome from './components/Welcome';
 import Profile from './components/Profile';
+import Delete from './components/Delete';
 
-function AuthenticatedRoute ({component: Compomponent, authenticated, ...rest}) {
+function AuthenticatedRoute ({component: Compomponent, userID, ...rest}) {
   return (
     <Route
     {...rest}
-    render={(props) => authenticated === true 
+    render={(props) => userID !== null 
       ? <Compomponent {...props} {...rest} />
       : <Redirect to='/login'/> } />
   )
@@ -28,13 +29,43 @@ class App extends Component {
         authenticated: false,
         loading: true,
         userID: null,
+        email: null,
         name: null,
         picture: null
     }
     this.setAuthenticated = this.setAuthenticated.bind(this)
     this.setUserId = this.setUserId.bind(this)
+    this.setEmail = this.setEmail.bind(this)
     this.setName = this.setName.bind(this)
     this.setPicture = this.setPicture.bind(this)
+    this.setStateUser = this.setStateUser.bind(this)  
+  }
+
+  setLocalUser(id, em, na, pic) {
+    localStorage.setItem('userID', id);
+    localStorage.setItem('userEmail', em);
+    localStorage.setItem('userName', na);
+    localStorage.setItem('userPicture', pic);
+    /* this.setState({
+      userID: localStorage.getItem('userID'),
+      email: localStorage.getItem('userEmail'),
+      name: localStorage.getItem('userName'),
+      picture: localStorage.getItem('userPicture')
+    }) */
+    console.log('DATI LOCAL STORAGE:')
+    console.log(localStorage.getItem('userID'))
+    console.log(localStorage.getItem('userEmail'))
+    console.log(localStorage.getItem('userName'))
+    console.log(localStorage.getItem('userPicture'))    
+  }
+
+  setStateUser() {
+    this.setState({
+      userID: localStorage.getItem('userID'),
+      email: localStorage.getItem('userEmail'),
+      name: localStorage.getItem('userName'),
+      picture: localStorage.getItem('userPicture')
+    })
   }
 
   setAuthenticated(param) {
@@ -42,10 +73,20 @@ class App extends Component {
       authenticated : param
     });
   }
+
+  setUserLocalStorage(currentUser) {
+    localStorage.setItem('user', currentUser)
+  }
   
   setUserId(param) {
     this.setState({
       userID : param
+    });
+  }
+
+  setEmail(param) {
+    this.setState({
+      email : param
     });
   }
 
@@ -59,6 +100,10 @@ class App extends Component {
     this.setState({
       picture : param
     });
+  }
+
+  getPicture() {
+    return JSON.parse(JSON.stringify(localStorage.getItem('user.photoURL')))
   }
 
 
@@ -76,6 +121,7 @@ class App extends Component {
         })
       }
     })
+    this.setStateUser()
   }
 
   componentWillUnmount() {
@@ -105,7 +151,8 @@ class App extends Component {
           <div>
             {/* HEADER passando la variabile authenticated */}
             <Header authenticated={this.state.authenticated} 
-                    picture={this.state.picture}/>  
+                    picture={this.state.picture}
+                    getPicture={this.getPicture}/>  
           <Switch>
             {/* CREO TUTTI I PATH */}
 
@@ -114,22 +161,40 @@ class App extends Component {
             <Route exact path="/login" render={(props) => 
                   <Login setAuthenticated={this.setAuthenticated}
                   setUserId={this.setUserId}
+                  setEmail={this.setEmail}
+                  setUserLocalStorage={this.setUserLocalStorage}
                   setName={this.setName} 
                   setPicture={this.setPicture}
+                  setLocalUser={this.setLocalUser}
+                  setStateUser={this.setStateUser}
                   {...props}/> //per history.push
                 } />
 
-            <Route exact path="/logout" component={Logout} />
+            {/* LOGOUT */}
+            <AuthenticatedRoute
+            exact path="/logout"
+            userID={this.state.userID}
+            component={Logout}/>
 
+            {/* PROFILE */}
             <AuthenticatedRoute
             exact path="/profile"
-            authenticated={this.state.authenticated}
             userID={this.state.userID}
             name={this.state.name}
             component={Profile}/>
 
+            {/* CANCELLAZIONE */}
+            <AuthenticatedRoute 
+            exact path="/cancellazione"
+            userID={this.state.userID}
+            name={this.state.name}
+            email={this.state.email}
+            setStateUser={this.setStateUser}
+            component={Delete} />
+
             {/* ROUTE NON PRESENTE: ERRORE */}
             <Route component={Error} />
+
             </Switch>
           </div>
         </BrowserRouter>

@@ -1,6 +1,6 @@
 import React, { Component } from 'react';
 import { fire } from '../config/Fire';
-import { Form, Button } from 'react-bootstrap';
+import { Form, Button, Collapse } from 'react-bootstrap';
  
 class Profile extends Component {
   constructor() {
@@ -9,7 +9,9 @@ class Profile extends Component {
       account: [],
       username: [],
       password: [],
-      users: ''
+      users: '',
+      openNuovo: false,
+      openSalvato: false
     }
   }
 
@@ -38,9 +40,7 @@ class Profile extends Component {
           username: this.state.username.concat([child.val().username]),
           password: this.state.password.concat([child.val().password])
         });
-
         console.log(child.key + '' + child.val().username + '' + child.val().passowrd)
-
         const userList = this.state.account.map((dataList, index) =>
                 <p>
                     {dataList}
@@ -50,35 +50,19 @@ class Profile extends Component {
                     {this.state.password[index]}
                     <hr />
                 </p>
-
             );
-
             this.setState({
                 users: userList
             });
-
       })
     })
 
-  }
-
-  deleteData(){
-    fire.database().ref('users/').remove();
   }
 
   updateSingleData(email){
     fire.database().ref('users/').update({
         email,
     });
-  }
-
-  writeUserData(userID, acc, us, pwd){
-    fire.database().ref('users/' + userID +'/'+ acc).set({
-      username: us,
-      password: pwd
-    });
-
-    console.log('database scritto')
   }
 
   aggiungiDati(event) {
@@ -94,17 +78,28 @@ class Profile extends Component {
     //this.readUserData(this.props.userID)
   }
 
-  componentDidMount() {
+  componentWillMount() {
     this.readUserData(this.props.userID)
   }
 
+  componentWillUnmount() {
+    /* cancellare dati utente */
+  }
+
   render() {
+    const { openNuovo, openSalvato } = this.state;
     return (
      <div className="welcomeText">
          <h1>Pagina personale di {this.props.name}</h1>
          
-         <Button variant="dark" data-toggle="collapse" data-target="#nuovoAccountStyle">Aggiungi nuovo</Button>
-        <div className="nuovoAccountStyle">
+        <Button variant='dark'
+          onClick={() => this.setState({ openNuovo: !openNuovo })}
+          aria-controls="collapse-account-nuovo"
+          aria-expanded={openNuovo}>
+          Aggiungi account
+        </Button>
+        <Collapse in={this.state.openNuovo}>
+        <div className="nuovoAccountStyle" id="collapse-account-nuovo">
           <Form onSubmit={(event) => { this.aggiungiDati(event) }} ref={(form) => { this.accountForm = form }}>
           <Form.Group controlId="formBasicInput">
               <Form.Label>Account</Form.Label>
@@ -124,21 +119,38 @@ class Profile extends Component {
               <Form.Control type="password" placeholder="Password" ref={(input) => { this.passwordInput = input }}/>
             </Form.Group>
             <Button variant="dark" type="submit">
-              Aggiungi
+              Salva
             </Button>
           </Form>
+        </div>
+        </Collapse>      
+        <br />
+        <br />
+        <Button variant='dark'
+        onClick={() => this.setState({ openSalvato: !openSalvato })}
+        aria-controls="collapse-account-salvati"
+        aria-expanded={openSalvato}>
+        Account Salvati
+        </Button>
+        <Collapse in={this.state.openSalvato}>
+          <div id="collapse-account-salvati">
+          <ul>{this.state.users}</ul>
+          </div>
+        </Collapse>
+
+
+        {/* <table>
+          <tr>
+                  <td colspan="2" align="center"><b>Impostazioni</b></td>
+              </tr>
+              <tr><td><b>Nome</b></td><td><input type="text" name="nome"/></td></tr>
+              <tr><td><b>Cognome</b></td><td><input type="text" name="cognome"/></td></tr>
+              <tr><td><b>Password</b></td><td><input type="password" name="password"/></td></tr>
+              <tr><td colspan="2" align="right"><input type="button" value="Invia" onClick="Modulo()"/></td></tr>
+          
+        </table> */}
 
         </div>
-
-        
-        <div>
-          <p>Account salvati:</p>
-
-          <ul>{this.state.users}</ul>       
-  
-          {/* <input type="password" id="pwd" placeholder="Password"></input> */}
-        </div>
-     </div>
     );
   }
 }

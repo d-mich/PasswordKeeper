@@ -16,6 +16,12 @@ class Logout extends Component {
     fire.auth().signOut().then((user) => {
       this.setState({ redirect: true })
     })
+    this.deleteStorage()
+  }
+
+  deleteStorage() {
+    let keysToRemove = ["userID", "userName", "userEmail", "userPicture"];
+    keysToRemove.forEach(k => localStorage.removeItem(k))
   }
 
   render() {
