@@ -88,3 +88,10 @@
     border: 10px;
     color: white;
 }
+
+/* DELETE */
+
+.deleteComponents {
+    margin-top: 50px;
+    text-align: center
+}
