@@ -20,6 +20,14 @@
     border-radius: 20px
 }
 
+.fiUser {
+    width: 30px;
+    height: 30px;
+    color:white;
+    border: 2px solid white;
+    border-radius: 20px;
+}
+
 .iconeDropdown {
     margin-right: 10px;
 }

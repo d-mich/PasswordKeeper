@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Navbar, Nav, Form, Dropdown, Button, ButtonGroup, DropdownButton } from 'react-bootstrap';
 import UserLogin from '../user-login.png';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
-import { FiMenu, FiInfo, FiTrash2, FiLogOut } from 'react-icons/fi';
+import { FiUser, FiMenu, FiInfo, FiTrash2, FiLogOut } from 'react-icons/fi';
 import Delete from './Delete';
 
 class Header extends Component {
@@ -26,7 +26,7 @@ class Header extends Component {
                   <img className="immagineUtente" src={this.props.picture} alt="UserPicture"/>
                 </Button>
               : <Button variant="outline" href="/login" size="sm" onClick={this.openModal}>
-                  <img className="immagineUtente" src={UserLogin} alt="Login" />
+                  <FiUser className="fiUser"/>
                 </Button>
               }
               {this.props.authenticated
