@@ -32,10 +32,6 @@ class Login extends Component{
       }
 
       setUserInfo() {
-        /* this.props.setUserId(JSON.parse(JSON.stringify(this.state.user.uid)))
-        this.props.setEmail(JSON.parse(JSON.stringify(this.state.user.email)))
-        this.props.setName(JSON.parse(JSON.stringify(this.state.user.displayName)))
-        this.props.setPicture(JSON.parse(JSON.stringify(this.state.user.photoURL))) */
         this.props.setLocalUser(
           JSON.parse(JSON.stringify(this.state.user.uid)),
           JSON.parse(JSON.stringify(this.state.user.email)),
@@ -179,7 +175,7 @@ class Login extends Component{
           console.log(snapshot.val())
       });
     }
-
+    
     render() {
         //redirect: root
         if(this.state.redirect === true) {

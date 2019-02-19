@@ -10,16 +10,7 @@ import Footer from './components/Footer';
 import Welcome from './components/Welcome';
 import Profile from './components/Profile';
 import Delete from './components/Delete';
-
-function AuthenticatedRoute ({component: Compomponent, userID, ...rest}) {
-  return (
-    <Route
-    {...rest}
-    render={(props) => userID !== null 
-      ? <Compomponent {...props} {...rest} />
-      : <Redirect to='/login'/> } />
-  )
-}
+import Security from './Security';
 
 class App extends Component {
 
@@ -106,6 +97,9 @@ class App extends Component {
     return JSON.parse(JSON.stringify(localStorage.getItem('user.photoURL')))
   }
 
+  componentDidMount() {
+    this.setStateUser()
+  }
 
   componentWillMount() {
     this.removeAuthListener = fire.auth().onAuthStateChanged((user) => {
@@ -124,9 +118,9 @@ class App extends Component {
     this.setStateUser()
   }
 
-  componentWillUnmount() {
+/*   componentWillUnmount() {
     this.removeAuthListener();
-  }
+  } */
 
 
   render() {
@@ -150,7 +144,8 @@ class App extends Component {
         <BrowserRouter>
           <div>
             {/* HEADER passando la variabile authenticated */}
-            <Header authenticated={this.state.authenticated} 
+            <Header authenticated={this.state.authenticated}
+                    name={this.state.name}
                     picture={this.state.picture}
                     getPicture={this.getPicture}/>  
           <Switch>
@@ -169,28 +164,34 @@ class App extends Component {
                   setStateUser={this.setStateUser}
                   {...props}/> //per history.push
                 } />
+            
+            {this.state.authenticated 
+            ? <>
+                
+                <Route exact path="/logout" render={(props) => 
+                  <Logout 
+                  userID={this.state.userID}
+                  {...props}/> //per history.push              
+                } />
+                
+                <Route exact path="/profile" render={(props) => 
+                  <Profile 
+                  userID={this.state.userID}
+                  name={this.state.name}
+                  {...props}/> //per history.push              
+                } />
+                
+                <Route exact path="/cancellazione" render={(props) => 
+                  <Delete 
+                  userID={this.state.userID}
+                  name={this.state.name}
+                  email={this.state.email}
+                  {...props}/> //per history.push              
+                } />
+               </>         
 
-            {/* LOGOUT */}
-            <AuthenticatedRoute
-            exact path="/logout"
-            userID={this.state.userID}
-            component={Logout}/>
-
-            {/* PROFILE */}
-            <AuthenticatedRoute
-            exact path="/profile"
-            userID={this.state.userID}
-            name={this.state.name}
-            component={Profile}/>
-
-            {/* CANCELLAZIONE */}
-            <AuthenticatedRoute 
-            exact path="/cancellazione"
-            userID={this.state.userID}
-            name={this.state.name}
-            email={this.state.email}
-            setStateUser={this.setStateUser}
-            component={Delete} />
+            : <Redirect to='/login'/> 
+            }
 
             {/* ROUTE NON PRESENTE: ERRORE */}
             <Route component={Error} />
@@ -198,6 +199,7 @@ class App extends Component {
             </Switch>
           </div>
         </BrowserRouter>
+        <Security />
         <Footer />
       </div>
     );

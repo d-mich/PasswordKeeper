@@ -37,6 +37,11 @@ class Header extends Component {
                     <FiMenu/>                 
                   </Dropdown.Toggle>
                     <DropdownMenu className="dropdownMenu">
+                      <Dropdown.Item className="dropdownHeader" href="/profile">
+                        <FiUser className="iconaAccesso"/>
+                        {this.props.name}
+                      </Dropdown.Item>
+                      <Dropdown.Divider className="dropdownDivider"/>
                       <Dropdown.Item className="dropdownHeader" href="/info">
                         <FiInfo className="iconeDropdown"/>
                         Info
@@ -46,8 +51,8 @@ class Header extends Component {
                         Cancella Account
                       </Dropdown.Item>
                       <Dropdown.Item className="dropdownHeader" href="/logout">
-                        <FiLogOut className="iconeDropdown"/>
-                        Logout
+                        <FiLogOut className="iconaUscita"/>
+                        Esci
                       </Dropdown.Item>                      
                     </DropdownMenu>                  
                 </Dropdown>

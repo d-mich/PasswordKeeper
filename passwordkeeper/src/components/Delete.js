@@ -3,14 +3,13 @@ import { Button, Modal } from 'react-bootstrap'
 import { fire } from '../config/Fire';
 
 class Delete extends Component {
-    constructor(props) {
-      super(props);  
+    constructor() {
+      super();  
+      this.state = {
+        show: false
+      }
       this.handleShow = this.handleShow.bind(this);
       this.handleClose = this.handleClose.bind(this);
-  
-      this.state = {
-        show: false,
-      };
     }
   
     handleClose() {
@@ -21,18 +20,28 @@ class Delete extends Component {
       this.setState({ show: true });
     }
 
-    deleteUserData(){
-      fire.database().ref('users/'+localStorage.getItem('userID')).remove();
-      
+    deleteUserData = (props) => {
+      //cancellazione dati firebase
+      fire.database().ref('users/'+this.props.userID).remove();
       //logout
       fire.auth().signOut()
+      //chiusura modal
+      this.handleClose()
+      //cancellazione local storage
+      this.deleteStorage()
+      //redirect
+      this.props.history.push('/home')
+    }
+
+    deleteStorage() {
+      let keysToRemove = ["userID", "userName", "userEmail", "userPicture"];
+      keysToRemove.forEach(k => localStorage.removeItem(k))
     }
 
     componentWillMount() {
     }
   
     render() {
-      const id = localStorage.getItem('userID')
       return (
           <div className="deleteComponents">
             <Button variant="danger" onClick={this.handleShow}>
@@ -46,7 +55,7 @@ class Delete extends Component {
                 <Modal.Body>
                     <h5>Dati account</h5>
                     <ul>
-                        <li>UserID: {id}</li>
+                        <li>UserID: {this.props.userID}</li>
                         <li>Email: {this.props.email}</li>
                         <li>Nome: {this.props.name}</li>
                     </ul>
@@ -55,7 +64,7 @@ class Delete extends Component {
                 <Button variant="success" onClick={this.handleClose}>
                     Annulla
                 </Button>
-                <Button variant="danger" onClick={this.deleteUserData && this.handleClose}>
+                <Button variant="danger" onClick={this.deleteUserData}>
                     Elimina
                 </Button>
                 </Modal.Footer>

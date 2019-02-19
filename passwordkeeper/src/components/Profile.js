@@ -16,6 +16,7 @@ class Profile extends Component {
   }
 
   writeUserData(userID, email,fname,lname){
+    console.log("USER ID: "+userID)
     fire.database().ref('users/' + userID).set({
         email,
         fname,
@@ -67,7 +68,7 @@ class Profile extends Component {
 
   aggiungiDati(event) {
     event.preventDefault()  //quando si clicca non cambia pagina e la ricarica
-    
+    console.log("AGGIUNTA DATI DATABASE")
     const accountNuovo = this.accountInput.value
     const usernameNuovo = this.accountInput.value
     const passwordNuovo = this.passwordInput.value
@@ -78,9 +79,17 @@ class Profile extends Component {
     //this.readUserData(this.props.userID)
   }
 
-  componentWillMount() {
-    this.readUserData(this.props.userID)
+  componentDidMount() {
+    /* this.props.setStateUser() */
+    console.log("USER ID PROFILE: "+this.props.userID)
+    console.log("USER NAME PROFILE: "+this.props.name)
+    console.log("USER ID P: "+this.state.userID)
+    console.log("USER NAME P: "+this.state.name)
   }
+
+  /* componentWillMount() {
+    this.readUserData(this.props.userID)
+  } */
 
   componentWillUnmount() {
     /* cancellare dati utente */
@@ -90,66 +99,69 @@ class Profile extends Component {
     const { openNuovo, openSalvato } = this.state;
     return (
      <div className="welcomeText">
-         <h1>Pagina personale di {this.props.name}</h1>
-         
-        <Button variant='dark'
-          onClick={() => this.setState({ openNuovo: !openNuovo })}
+        <h3>Pagina personale di {this.props.name}</h3>
+
+        <Button variant='outline-light' className="accountSalvati"
+        onClick={() => this.setState({ openNuovo: false , openSalvato: !openSalvato})}
+        aria-controls="collapse-account-salvati"
+        aria-expanded={openSalvato}>
+        Account Salvati
+        </Button>
+        <Button variant='outline-light' className="accountAggiungi"
+          onClick={() => this.setState({ openSalvato: false, openNuovo: !openNuovo})}
           aria-controls="collapse-account-nuovo"
           aria-expanded={openNuovo}>
-          Aggiungi account
+          Aggiungi Account
         </Button>
+        <Collapse in={this.state.openSalvato}>
+          <div id="collapse-account-salvati">
+            <ul>{this.state.users}</ul>
+            <table className="tableAccountSalvati">
+              {/* <tr><td><b>Impostazioni</b></td></tr> */}
+              <tr>
+                <td><p>Account</p></td>
+                <td><input type="text" name="nome"/></td>
+              </tr>
+              <tr>
+                <td><p>Username</p></td>
+                <td><input type="text" name="cognome"/></td>
+              </tr>
+              <tr>
+                <td><p>Password</p></td>
+                <td><input type="password" name="password"/></td>
+              </tr>
+              <tr>
+                <td><input type="button" value="Invia" onClick="Modulo()"/></td>
+              </tr>
+            </table>
+          </div>
+        </Collapse>
+        
         <Collapse in={this.state.openNuovo}>
         <div className="nuovoAccountStyle" id="collapse-account-nuovo">
           <Form onSubmit={(event) => { this.aggiungiDati(event) }} ref={(form) => { this.accountForm = form }}>
           <Form.Group controlId="formBasicInput">
               <Form.Label>Account</Form.Label>
               <Form.Control type="text" placeholder="Enter account" ref={(input) => { this.accountInput = input }}/>
-              <Form.Text className="text-muted">
-                Ex: Facebook, Twitter..
+              <Form.Text className="textAccount">
+                Es: Facebook, Twitter..
               </Form.Text>
             </Form.Group>
-
             <Form.Group controlId="formBasicInput">
               <Form.Label>Username</Form.Label>
               <Form.Control type="text" placeholder="Enter username" ref={(input) => { this.usernameInput = input }}/>
             </Form.Group>
-
             <Form.Group controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" placeholder="Password" ref={(input) => { this.passwordInput = input }}/>
             </Form.Group>
-            <Button variant="dark" type="submit">
+            <Button variant="dark" type="submit" 
+            onClick={() => this.setState({ openNuovo: false })}>
               Salva
             </Button>
           </Form>
         </div>
-        </Collapse>      
-        <br />
-        <br />
-        <Button variant='dark'
-        onClick={() => this.setState({ openSalvato: !openSalvato })}
-        aria-controls="collapse-account-salvati"
-        aria-expanded={openSalvato}>
-        Account Salvati
-        </Button>
-        <Collapse in={this.state.openSalvato}>
-          <div id="collapse-account-salvati">
-          <ul>{this.state.users}</ul>
-          </div>
         </Collapse>
-
-
-        {/* <table>
-          <tr>
-                  <td colspan="2" align="center"><b>Impostazioni</b></td>
-              </tr>
-              <tr><td><b>Nome</b></td><td><input type="text" name="nome"/></td></tr>
-              <tr><td><b>Cognome</b></td><td><input type="text" name="cognome"/></td></tr>
-              <tr><td><b>Password</b></td><td><input type="password" name="password"/></td></tr>
-              <tr><td colspan="2" align="right"><input type="button" value="Invia" onClick="Modulo()"/></td></tr>
-          
-        </table> */}
-
         </div>
     );
   }
