@@ -15,12 +15,10 @@ class Profile extends Component {
     }
   }
 
-  writeUserData(userID, email,fname,lname){
-    console.log("USER ID: "+userID)
-    fire.database().ref('users/' + userID).set({
-        email,
-        fname,
-        lname
+  writeUserData(userid, acc, us, pwd){
+    fire.database().ref('users/' + userid + '/' + acc).set({
+        username: us,
+        password: pwd
     }).then((data)=>{
         //success callback
         console.log('data ' , data)
@@ -31,6 +29,9 @@ class Profile extends Component {
   }
 
   readUserData(userID) {
+    this.setState({
+      users: null
+    })
     const rootRef = fire.database().ref();
     const user = rootRef.child('users/'+userID)
 
@@ -41,7 +42,7 @@ class Profile extends Component {
           username: this.state.username.concat([child.val().username]),
           password: this.state.password.concat([child.val().password])
         });
-        console.log(child.key + '' + child.val().username + '' + child.val().passowrd)
+        //console.log(child.key + '' + child.val().username + '' + child.val().passowrd)
         const userList = this.state.account.map((dataList, index) =>
                 <p>
                     {dataList}
@@ -66,30 +67,42 @@ class Profile extends Component {
     });
   }
 
+  chiaveCifratura(str) {
+    return str.split("").reverse().join("");
+  }
+
   aggiungiDati(event) {
     event.preventDefault()  //quando si clicca non cambia pagina e la ricarica
-    console.log("AGGIUNTA DATI DATABASE")
     const accountNuovo = this.accountInput.value
-    const usernameNuovo = this.accountInput.value
+    const usernameNuovo = this.usernameInput.value
     const passwordNuovo = this.passwordInput.value
+
+    //import libreria
+    var CryptoJS = require("crypto-js"); 
+    //chiave
+    var chiave = this.chiaveCifratura(this.props.userID)
+    // Encrypt
+    var ciphertext = CryptoJS.AES.encrypt(passwordNuovo, chiave);    
+    // Decrypt
+    var bytes = CryptoJS.AES.decrypt(ciphertext.toString(), chiave);
+    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
     this.accountForm.reset();
 
-    this.writeUserData(this.props.userID, accountNuovo, usernameNuovo, passwordNuovo)
+    this.writeUserData(this.props.userID, accountNuovo, usernameNuovo, ciphertext.toString())
     //this.readUserData(this.props.userID)
   }
 
   componentDidMount() {
-    /* this.props.setStateUser() */
     console.log("USER ID PROFILE: "+this.props.userID)
     console.log("USER NAME PROFILE: "+this.props.name)
     console.log("USER ID P: "+this.state.userID)
     console.log("USER NAME P: "+this.state.name)
   }
 
-  /* componentWillMount() {
+  componentWillMount() {
     this.readUserData(this.props.userID)
-  } */
+  }
 
   componentWillUnmount() {
     /* cancellare dati utente */
@@ -115,6 +128,9 @@ class Profile extends Component {
         </Button>
         <Collapse in={this.state.openSalvato}>
           <div id="collapse-account-salvati">
+
+          {this.state.users}
+          
             <ul>{this.state.users}</ul>
             <table className="tableAccountSalvati">
               {/* <tr><td><b>Impostazioni</b></td></tr> */}

@@ -10,7 +10,6 @@ import Footer from './components/Footer';
 import Welcome from './components/Welcome';
 import Profile from './components/Profile';
 import Delete from './components/Delete';
-import Security from './Security';
 
 class App extends Component {
 
@@ -199,7 +198,6 @@ class App extends Component {
             </Switch>
           </div>
         </BrowserRouter>
-        <Security />
         <Footer />
       </div>
     );
