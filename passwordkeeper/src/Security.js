@@ -32,22 +32,15 @@ class Security extends Component {
 
         //creazione la chiave di criptatura
         let myCipher = cipher('mySecretSalt')
-        console.log("CRIPTAZIONE: "+myCipher)
-
-        //criptazione
-        myCipher('the secret string')   // --> "7c606d287b6d6b7a6d7c287b7c7a61666f"
-        console.log("CRIPTAZIONE: "+myCipher)
-        
-        //To decipher, you need to create a decipher and use it:
         let myDecipher = decipher('mySecretSalt')
 
-        myDecipher("7c606d287b6d6b7a6d7c287b7c7a61666f") 
 
         return(
             <div>
-                <h2>Parola: the secret string</h2>
-                <h2>Criptata: {myCipher.salt}</h2>
-                <h2>Parola: the secret string</h2>
+
+                <h2>Criptata: {myCipher('SONO UN ELEFANTE')}</h2>
+                <h2>Decriptata: {myDecipher("5b474647285d46284d444d4e49465c4d") }</h2>
+                <h2>CriptaeDecripta: {myDecipher(myCipher('IO CAMBIO COME ME PARE')) }</h2>
             </div>    
         )
     }
