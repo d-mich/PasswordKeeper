@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { fire } from '../config/Fire';
 import { Form, Button, Collapse } from 'react-bootstrap';
+import { FiEye, FiEyeOff } from 'react-icons/fi';
  
 class Profile extends Component {
   constructor() {
@@ -11,7 +12,8 @@ class Profile extends Component {
       password: [],
       users: '',
       openNuovo: false,
-      openSalvato: false
+      openSalvato: false,
+      showPassword: false
     }
   }
 
@@ -43,7 +45,7 @@ class Profile extends Component {
           password: this.state.password.concat([child.val().password])
         });
         //console.log(child.key + '' + child.val().username + '' + child.val().passowrd)
-        const userList = this.state.account.map((dataList, index) =>
+        /*const userList = this.state.account.map((dataList, index) =>
                 <p>
                     {dataList}
                     <br />
@@ -55,7 +57,7 @@ class Profile extends Component {
             );
             this.setState({
                 users: userList
-            });
+            }); */
       })
     })
 
@@ -69,6 +71,19 @@ class Profile extends Component {
 
   chiaveCifratura(str) {
     return str.split("").reverse().join("");
+  }
+
+  decriptaPassword () {
+    //import libreria
+    var CryptoJS = require("crypto-js"); 
+    //chiave
+    var chiave = this.chiaveCifratura(this.props.userID)
+    var bytes = CryptoJS.AES.decrypt(this.state.password.toString(), chiave);
+    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+    this.setState ({
+      showPassword: true,
+      password: plaintext
+    })
   }
 
   aggiungiDati(event) {
@@ -136,18 +151,32 @@ class Profile extends Component {
               {/* <tr><td><b>Impostazioni</b></td></tr> */}
               <tr>
                 <td><p>Account</p></td>
-                <td><input type="text" name="nome"/></td>
+                <td><input type="text" name="nome" className="tableAccount" value={this.state.account}/></td>
               </tr>
               <tr>
                 <td><p>Username</p></td>
-                <td><input type="text" name="cognome"/></td>
+                <td><input type="text" name="cognome" className="tableAccount" value={this.state.username}/></td>
               </tr>
               <tr>
                 <td><p>Password</p></td>
-                <td><input type="password" name="password"/></td>
-              </tr>
-              <tr>
-                <td><input type="button" value="Invia" onClick="Modulo()"/></td>
+                {this.state.showPassword
+                ? <>
+                    <td><input type="text" name="password" className="tableAccount" value={this.state.password}/></td>
+                    <Button variant="outline-light" className="passwordButton" 
+                        onClick={this.decriptaPassword}>
+                        <FiEyeOff/>
+                    </Button>
+                    <Button onClick={this.decriptaPassword}></Button>
+                  </> 
+                : <>
+                    <td><input type="password" name="password" className="tableAccount" value={this.state.password}/></td>
+                    <Button variant="outline-light" className="passwordButton" onClick={() => this.setState({
+                        showPassword: true
+                      })}><FiEye/>
+                    </Button>
+                  </> 
+                }
+
               </tr>
             </table>
           </div>

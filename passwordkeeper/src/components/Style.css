@@ -133,7 +133,17 @@
 }
 
 .tableAccountSalvati {
-    margin-left: 160px;
+    margin-left: 100px;
+}
+
+.tableAccount {
+    width: 300px;
+    margin-left: 10px;
+}
+
+.passwordButton {
+    border: none;
+    background: none;
 }
 
 
