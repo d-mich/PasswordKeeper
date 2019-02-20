@@ -4,20 +4,53 @@ import { Form, Button, Collapse } from 'react-bootstrap';
 import { FiEye, FiEyeOff } from 'react-icons/fi';
  
 class Profile extends Component {
-  constructor() {
-    super();
+  constructor(props) {
+    super(props);
     this.state = {
+      userID: this.props.userID,
       account: [],
       username: [],
       password: [],
+      /* account: null,
+      username: null,
+      password: null, */
       users: '',
       openNuovo: false,
       openSalvato: false,
-      showPassword: false
+      cripted: true,
+      showPassword: false,
+      inputType: 'password'
     }
+    this.setPassword = this.setPassword.bind(this)
+    this.setShowPasswordTrue = this.setShowPasswordTrue.bind(this)
+    this.setShowPasswordFalse = this.setShowPasswordFalse.bind(this)
   }
 
-  writeUserData(userid, acc, us, pwd){
+  setCripted = (param) => {
+    this.setState({
+      cripted: param      
+    })
+  }
+
+  setShowPasswordTrue () {
+    this.setState({
+      showPassword: true      
+    })
+  }
+
+  setShowPasswordFalse () {
+    this.setState({
+      showPassword: false      
+    })
+  }
+
+  setPassword (param) {
+    this.setState({
+      password: param      
+    })
+  }
+
+  writeUserData(userid, acc, us, pwd) {
     fire.database().ref('users/' + userid + '/' + acc).set({
         username: us,
         password: pwd
@@ -28,6 +61,15 @@ class Profile extends Component {
         //error callback
         console.log('error ' , error)
     })
+  }
+
+  showPassword (index) {
+    this.state.password[index] = "ciao"
+  }
+
+  //password input type
+  changeInput(ind) {
+    document.getElementById(ind).type="text";
   }
 
   readUserData(userID) {
@@ -43,21 +85,29 @@ class Profile extends Component {
           account: this.state.account.concat([child.key]),
           username: this.state.username.concat([child.val().username]),
           password: this.state.password.concat([child.val().password])
+          /* account: child.key,
+          username: child.val().username,
+          password: child.val().password */
         });
         //console.log(child.key + '' + child.val().username + '' + child.val().passowrd)
-        /*const userList = this.state.account.map((dataList, index) =>
+        
+        const userList = this.state.account.map((dataList, index) =>
                 <p>
                     {dataList}
                     <br />
-                    {this.state.username[index]}
-                    <br />
-                    {this.state.password[index]}
+                    <br />                    
+                          <input type="password" id={index} name="password" className="tableAccount" value={this.decriptaPassword(this.state.password[index])}/>
+                          <Button variant="outline-light" className="passwordButton" 
+                              onClick={document.getElementById(index).type="text"}>
+                              <FiEyeOff/>
+                          </Button>
+                          <p>INDEX: {index}</p>                       
                     <hr />
                 </p>
             );
             this.setState({
                 users: userList
-            }); */
+            });
       })
     })
 
@@ -73,17 +123,20 @@ class Profile extends Component {
     return str.split("").reverse().join("");
   }
 
-  decriptaPassword () {
-    //import libreria
-    var CryptoJS = require("crypto-js"); 
-    //chiave
-    var chiave = this.chiaveCifratura(this.props.userID)
-    var bytes = CryptoJS.AES.decrypt(this.state.password.toString(), chiave);
-    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-    this.setState ({
-      showPassword: true,
-      password: plaintext
-    })
+  decriptaPassword (pass) {
+    
+    /* if(this.state.cripted) { */
+       //import libreria
+      var CryptoJS = require("crypto-js"); 
+      //chiave
+      var chiave = this.chiaveCifratura(this.state.userID)
+      var bytes = CryptoJS.AES.decrypt(pass.toString(), chiave);
+      var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+      return plaintext
+      //this.setPassword(plaintext)
+      this.setCripted(false)
+    /* } */   
+    this.setShowPasswordTrue()
   }
 
   aggiungiDati(event) {
@@ -95,28 +148,30 @@ class Profile extends Component {
     //import libreria
     var CryptoJS = require("crypto-js"); 
     //chiave
-    var chiave = this.chiaveCifratura(this.props.userID)
+    var chiave = this.chiaveCifratura(this.state.userID)
     // Encrypt
     var ciphertext = CryptoJS.AES.encrypt(passwordNuovo, chiave);    
     // Decrypt
     var bytes = CryptoJS.AES.decrypt(ciphertext.toString(), chiave);
     var plaintext = bytes.toString(CryptoJS.enc.Utf8);
 
+    this.setCripted(true)
+
     this.accountForm.reset();
 
-    this.writeUserData(this.props.userID, accountNuovo, usernameNuovo, ciphertext.toString())
+    this.writeUserData(this.state.userID, accountNuovo, usernameNuovo, ciphertext.toString())
     //this.readUserData(this.props.userID)
   }
 
   componentDidMount() {
-    console.log("USER ID PROFILE: "+this.props.userID)
+    console.log("USER ID PROFILE: "+this.state.userID)
     console.log("USER NAME PROFILE: "+this.props.name)
     console.log("USER ID P: "+this.state.userID)
     console.log("USER NAME P: "+this.state.name)
   }
 
   componentWillMount() {
-    this.readUserData(this.props.userID)
+    this.readUserData(this.state.userID)
   }
 
   componentWillUnmount() {
@@ -142,9 +197,7 @@ class Profile extends Component {
           Aggiungi Account
         </Button>
         <Collapse in={this.state.openSalvato}>
-          <div id="collapse-account-salvati">
-
-          {this.state.users}
+          <div className="collapse-account-salvati" id="collapse-account-salvati">
           
             <ul>{this.state.users}</ul>
             <table className="tableAccountSalvati">
@@ -161,18 +214,17 @@ class Profile extends Component {
                 <td><p>Password</p></td>
                 {this.state.showPassword
                 ? <>
+                    {/* PASSWORD MOSTRA */}
                     <td><input type="text" name="password" className="tableAccount" value={this.state.password}/></td>
                     <Button variant="outline-light" className="passwordButton" 
-                        onClick={this.decriptaPassword}>
+                        onClick={this.setShowPasswordFalse}>
                         <FiEyeOff/>
                     </Button>
-                    <Button onClick={this.decriptaPassword}></Button>
                   </> 
                 : <>
+                    {/* PASSWORD NASCONDI */}
                     <td><input type="password" name="password" className="tableAccount" value={this.state.password}/></td>
-                    <Button variant="outline-light" className="passwordButton" onClick={() => this.setState({
-                        showPassword: true
-                      })}><FiEye/>
+                    <Button variant="outline-light" className="passwordButton" onClick={this.decriptaPassword}><FiEye/>
                     </Button>
                   </> 
                 }
