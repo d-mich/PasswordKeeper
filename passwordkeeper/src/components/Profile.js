@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { fire } from '../config/Fire';
 import { Form, Button, Collapse } from 'react-bootstrap';
-import { FiEye, FiEyeOff } from 'react-icons/fi';
+import { FiEye, FiEyeOff, FiEdit } from 'react-icons/fi';
  
 class Profile extends Component {
   constructor(props) {
@@ -11,15 +11,14 @@ class Profile extends Component {
       account: [],
       username: [],
       password: [],
-      /* account: null,
-      username: null,
-      password: null, */
-      users: '',
+      displayAccount: '',
       openNuovo: false,
       openSalvato: false,
       cripted: true,
       showPassword: false,
-      inputType: 'text'
+      inputType: 'text',
+      facebookForm: true,
+      twitterForm: false
     }
     this.setPassword = this.setPassword.bind(this)
     this.setShowPasswordTrue = this.setShowPasswordTrue.bind(this)
@@ -63,8 +62,8 @@ class Profile extends Component {
     })
   }
 
-  showPassword (index) {
-    this.state.password[index] = "ciao"
+  showPassword () {
+    console.log("SHOW PASSWORD")
   }
 
   //password input type
@@ -73,49 +72,106 @@ class Profile extends Component {
   }
 
   readUserData(userID) {
-    this.setState({
-      users: null
-    })
+    
+    if (this.state.displayAccount ===  '') {
+        console.log("ACCOUNT NULLO")
+    } else {
+      console.log("ACCOUNT PIENO")
+    }
+
     const rootRef = fire.database().ref();
     const user = rootRef.child('users/'+userID)
 
-    user.once('value', snap => {
-      snap.forEach(child => {
-        this.setState({
-          account: this.state.account.concat([child.key]),
-          username: this.state.username.concat([child.val().username]),
-          password: this.state.password.concat([child.val().password])
-          /* account: child.key,
-          username: child.val().username,
-          password: child.val().password */
+    
+      user.once('value', snap => {
+        snap.forEach(child => {
+          this.setState({
+            account: this.state.account.concat([child.key]),
+            username: this.state.username.concat([child.val().username]),
+            password: this.state.password.concat([child.val().password])
+          });
         });
-      })
-        //console.log(child.key + '' + child.val().username + '' + child.val().passowrd)
-        
-        //const userList = this.state.account.map((account, index) => {
-          console.log("ACCOUNT "+this.state.account)
-          console.log("US "+this.state.username)
-          console.log("PW "+this.state.password)
+            
+        const accountList = this.state.account.map((account, index) => 
+                   <>
+                   {account === 'facebook'
+                    ? 
+                      <Form onSubmit={(event) => { this.modificaDatiFacebook(event) }} ref={(form) => { this.formFacebook = form }}>
+                        <Form.Group controlId="formBasicInput">
+                          <Form.Label>Account</Form.Label>
+                          <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
+                        <Form.Group controlId="formBasicInput">
+                          <Form.Label>Username</Form.Label>
+                          <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
+                        </Form.Group>
+                        <Form.Group controlId="formBasicPassword">
+                          <Form.Label>Password</Form.Label>
+                          <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
+                        </Form.Group>
+                        <Button className="formPassword" variant="dark" type="submit" 
+                          >
+                          <FiEye className="iconeForm"/>
+                        </Button>
+                        <Button className="formEdit" variant="dark" type="submit">
+                          <FiEdit className="iconeForm"/>
+                        </Button>
+                      </Form>    
+                    : null
+                    }                                  
+                  </>   
+         );
+         this.setState ({
+          displayAccount : accountList
+         })        
+      }); 
+  }
 
-        //});
-                {/* <p>
-                    Account: {dataList}
-                    <br />
-                    Username: {this.state.username[index]}
-                    <br />
-                    Password:                 
-                    <input type={this.state.inputType} id="inputPassword" name="password" className="tableAccount" value={this.decriptaPassword(this.state.password[index])}/>
-                    <Button onClick={() => this.setState({ inputType: 'password'}) }></Button>
-                    <p>INDEX: {index}</p>                       
-                </p> */}
-                
-            /* ); */
-            /* this.setState({
-                users: userList
-            }); */
-      /* }) */
-    })
-
+  modificaDatiFacebook (event) {
+      event.preventDefault()  //quando si clicca non cambia pagina e la ricarica
+      const account = this.accountFacebook.value
+      const username = this.usernameFacebook.value
+      const password = this.passwordFacebook.value
+  
+      //import libreria
+      var CryptoJS = require("crypto-js"); 
+      //chiave
+      var chiave = this.chiaveCifratura(this.state.userID)  
+      // Decrypt
+      var bytes = CryptoJS.AES.decrypt(password.toString(), chiave);
+      var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+      console.log("PASSWORD DECRIPTATA: "+plaintext)
+     
+      const acc = this.state.account.map((account, index) => 
+                   <>
+                   {account === 'facebook'
+                    ? 
+                      <Form onSubmit={(event) => { this.modificaDatiFacebook(event) }} ref={(form) => { this.formFacebook = form }}>
+                        <Form.Group controlId="formBasicInput">
+                          <Form.Label>Account</Form.Label>
+                          <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
+                        <Form.Group controlId="formBasicInput">
+                          <Form.Label>Username</Form.Label>
+                          <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
+                        </Form.Group>
+                        <Form.Group controlId="formBasicPassword">
+                          <Form.Label>Password</Form.Label>
+                          <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
+                        </Form.Group>
+                        <Button className="formPassword" variant="dark" type="submit" 
+                          >
+                          <FiEye className="iconeForm"/>
+                        </Button>
+                        <Button className="formEdit" variant="dark" type="submit">
+                          <FiEdit className="iconeForm"/>
+                        </Button>
+                      </Form>    
+                    : null
+                    }                                  
+                  </>   
+         );
+         this.setState ({
+          displayAccount : acc
+         })
   }
 
   updateSingleData(email){
@@ -202,26 +258,10 @@ class Profile extends Component {
           Aggiungi Account
         </Button>
         <Collapse in={this.state.openSalvato}>
-          <div className="collapse-account-salvati" id="collapse-account-salvati">
+          <div className="nuovoAccountStyle" id="collapse-account-salvati">
           
-            <p>
-            {this.state.account.map((index) => {
-              return <p>{index}</p>})
-            }
-            </p> 
+            {this.state.displayAccount}
 
-            <p>
-            {this.state.username.map((index) => {
-              return <p>{index}</p>})
-            }
-            </p>
-
-            <p>
-            {this.state.password.map((index) => {
-              return <p>{index}</p>})
-            }
-            </p>            
-           
           </div>
         </Collapse>
         
@@ -237,11 +277,11 @@ class Profile extends Component {
             </Form.Group>
             <Form.Group controlId="formBasicInput">
               <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter username" ref={(input) => { this.usernameInput = input }}/>
+              <Form.Control type="text" placeholder="Enter username" value="" ref={(input) => { this.usernameInput = input }}/>
             </Form.Group>
             <Form.Group controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" ref={(input) => { this.passwordInput = input }}/>
+              <Form.Control type="password" placeholder="Password" value="" ref={(input) => { this.passwordInput = input }}/>
             </Form.Group>
             <Button variant="dark" type="submit" 
             onClick={() => this.setState({ openNuovo: false })}>

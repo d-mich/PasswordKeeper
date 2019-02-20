@@ -149,6 +149,22 @@
     background: none;
 }
 
+.formPassword {
+    margin-right: 30px;
+    background: none;
+    border: none;
+}
+
+.formEdit {
+    background: none;
+    border: none;
+}
+
+.iconeForm {
+    width: 30px;
+    height: 30px;
+}
+
 /* DELETE */
 
 .deleteComponents {
