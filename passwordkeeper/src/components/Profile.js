@@ -19,7 +19,7 @@ class Profile extends Component {
       openSalvato: false,
       cripted: true,
       showPassword: false,
-      inputType: 'password'
+      inputType: 'text'
     }
     this.setPassword = this.setPassword.bind(this)
     this.setShowPasswordTrue = this.setShowPasswordTrue.bind(this)
@@ -68,8 +68,8 @@ class Profile extends Component {
   }
 
   //password input type
-  changeInput(ind) {
-    document.getElementById(ind).type="text";
+  changeInput() {
+    document.getElementById("inputPassword").value="text";
   }
 
   readUserData(userID) {
@@ -89,26 +89,31 @@ class Profile extends Component {
           username: child.val().username,
           password: child.val().password */
         });
+      })
         //console.log(child.key + '' + child.val().username + '' + child.val().passowrd)
         
-        const userList = this.state.account.map((dataList, index) =>
-                <p>
-                    {dataList}
+        //const userList = this.state.account.map((account, index) => {
+          console.log("ACCOUNT "+this.state.account)
+          console.log("US "+this.state.username)
+          console.log("PW "+this.state.password)
+
+        //});
+                {/* <p>
+                    Account: {dataList}
                     <br />
-                    <br />                    
-                          <input type="password" id={index} name="password" className="tableAccount" value={this.decriptaPassword(this.state.password[index])}/>
-                          <Button variant="outline-light" className="passwordButton" 
-                              onClick={document.getElementById(index).type="text"}>
-                              <FiEyeOff/>
-                          </Button>
-                          <p>INDEX: {index}</p>                       
-                    <hr />
-                </p>
-            );
-            this.setState({
+                    Username: {this.state.username[index]}
+                    <br />
+                    Password:                 
+                    <input type={this.state.inputType} id="inputPassword" name="password" className="tableAccount" value={this.decriptaPassword(this.state.password[index])}/>
+                    <Button onClick={() => this.setState({ inputType: 'password'}) }></Button>
+                    <p>INDEX: {index}</p>                       
+                </p> */}
+                
+            /* ); */
+            /* this.setState({
                 users: userList
-            });
-      })
+            }); */
+      /* }) */
     })
 
   }
@@ -199,38 +204,24 @@ class Profile extends Component {
         <Collapse in={this.state.openSalvato}>
           <div className="collapse-account-salvati" id="collapse-account-salvati">
           
-            <ul>{this.state.users}</ul>
-            <table className="tableAccountSalvati">
-              {/* <tr><td><b>Impostazioni</b></td></tr> */}
-              <tr>
-                <td><p>Account</p></td>
-                <td><input type="text" name="nome" className="tableAccount" value={this.state.account}/></td>
-              </tr>
-              <tr>
-                <td><p>Username</p></td>
-                <td><input type="text" name="cognome" className="tableAccount" value={this.state.username}/></td>
-              </tr>
-              <tr>
-                <td><p>Password</p></td>
-                {this.state.showPassword
-                ? <>
-                    {/* PASSWORD MOSTRA */}
-                    <td><input type="text" name="password" className="tableAccount" value={this.state.password}/></td>
-                    <Button variant="outline-light" className="passwordButton" 
-                        onClick={this.setShowPasswordFalse}>
-                        <FiEyeOff/>
-                    </Button>
-                  </> 
-                : <>
-                    {/* PASSWORD NASCONDI */}
-                    <td><input type="password" name="password" className="tableAccount" value={this.state.password}/></td>
-                    <Button variant="outline-light" className="passwordButton" onClick={this.decriptaPassword}><FiEye/>
-                    </Button>
-                  </> 
-                }
+            <p>
+            {this.state.account.map((index) => {
+              return <p>{index}</p>})
+            }
+            </p> 
 
-              </tr>
-            </table>
+            <p>
+            {this.state.username.map((index) => {
+              return <p>{index}</p>})
+            }
+            </p>
+
+            <p>
+            {this.state.password.map((index) => {
+              return <p>{index}</p>})
+            }
+            </p>            
+           
           </div>
         </Collapse>
         
