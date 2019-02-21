@@ -140,38 +140,7 @@ class Profile extends Component {
       var bytes = CryptoJS.AES.decrypt(password.toString(), chiave);
       var plaintext = bytes.toString(CryptoJS.enc.Utf8);
       console.log("PASSWORD DECRIPTATA: "+plaintext)
-     
-      const acc = this.state.account.map((account, index) => 
-                   <>
-                   {account === 'facebook'
-                    ? 
-                      <Form onSubmit={(event) => { this.modificaDatiFacebook(event) }} ref={(form) => { this.formFacebook = form }}>
-                        <Form.Group controlId="formBasicInput">
-                          <Form.Label>Account</Form.Label>
-                          <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
-                        <Form.Group controlId="formBasicInput">
-                          <Form.Label>Username</Form.Label>
-                          <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
-                        </Form.Group>
-                        <Form.Group controlId="formBasicPassword">
-                          <Form.Label>Password</Form.Label>
-                          <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
-                        </Form.Group>
-                        <Button className="formPassword" variant="dark" type="submit" 
-                          >
-                          <FiEye className="iconeForm"/>
-                        </Button>
-                        <Button className="formEdit" variant="dark" type="submit">
-                          <FiEdit className="iconeForm"/>
-                        </Button>
-                      </Form>    
-                    : null
-                    }                                  
-                  </>   
-         );
-         this.setState ({
-          displayAccount : acc
-         })
+
   }
 
   updateSingleData(email){
@@ -231,6 +200,11 @@ class Profile extends Component {
     console.log("USER NAME P: "+this.state.name)
   }
 
+  handleClick = (index) => {
+    console.log("VEDI PASSWORD")
+    this.state.password[index] = 'aaa'
+  }
+
   componentWillMount() {
     this.readUserData(this.state.userID)
   }
@@ -260,7 +234,69 @@ class Profile extends Component {
         <Collapse in={this.state.openSalvato}>
           <div className="nuovoAccountStyle" id="collapse-account-salvati">
           
-            {this.state.displayAccount}
+           
+
+           {this.state.account.map((account, index) => (
+
+              <div>
+
+                {account === 'twitter'
+                  ? <>
+                      {account}
+                      <br/>
+                      {this.state.username[index]}
+                      <br/>
+                      {this.decriptaPassword(this.state.password[index])}
+                      <br/>
+                      <Button className="formPassword" variant="dark" type="submit"
+                      >
+                        <FiEye className="iconeForm"/>
+                      </Button>
+                      <Button className="formEdit" variant="dark" 
+                      onClick={this.handleClick(index)}>
+                        <FiEdit className="iconeForm"/>
+                      </Button>
+                    </>
+                  : null
+                }
+
+                {account === 'facebook'
+                  ? 
+                    <Form onSubmit={(event) => { this.modificaDatiFacebook(event, index) }} ref={(form) => { this.formFacebook = form }}>
+                    <Form.Group controlId="formBasicInput">
+                      <Form.Label>Account</Form.Label>
+                      <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
+                      <Form.Group controlId="formBasicInput">
+                        <Form.Label>Username</Form.Label>
+                        <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
+                      </Form.Group>
+                      <Form.Group controlId="formBasicPassword">
+                        <Form.Label>Password</Form.Label>
+                        <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
+                      </Form.Group>
+                      <Button className="formPassword" variant="dark" type="submit"
+                      onClick={() => {
+                        let pass = [...this.state.password]
+                        pass[index] = 'bbb'
+                        this.setState({
+                          pass
+                        })
+                      }}>
+                        <FiEye className="iconeForm"/>
+                      </Button>
+                      <Button className="formEdit" variant="dark" type="submit">
+                        <FiEdit className="iconeForm"/>
+                      </Button>
+                    </Form>
+                  : null
+                }
+
+                
+                   
+                                                       
+            </div>
+           
+           ))}
 
           </div>
         </Collapse>
