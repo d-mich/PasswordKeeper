@@ -321,17 +321,18 @@ class Profile extends Component {
         <div className="nuovoAccountStyle" id="collapse-account-nuovo">
           <Form onSubmit={(event) => { this.aggiungiDati(event) }} ref={(form) => { this.accountForm = form }}>
           <Form.Group controlId="formBasicInput">
-            <Form.Label>Example select</Form.Label>            
+            <Form.Label> Salva il tuo account completando i seguenti campi: </Form.Label><br /><br /> 
             <Form.Group controlId="formBasicInput">
-              <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter username" ref={(input) => { this.accountInput = input }}/>
+              <Form.Label>Piattaforma</Form.Label>
+              <Form.Control type="text" placeholder="Enter a platform" ref={(input) => { this.accountInput = input }}/>
             </Form.Group>
+            <small >ex. Facebook, Twitter...</small> 
             </Form.Group>
             <Form.Group controlId="formBasicInput">
               <Form.Label>Username</Form.Label>
               <Form.Control type="text" placeholder="Enter username" ref={(input) => { this.usernameInput = input }}/>
             </Form.Group>
-            <Form.Group controlId="formBasicPassword">
+            <Form.Group >
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" placeholder="Password" ref={(input) => { this.passwordInput = input }}/>
             </Form.Group>

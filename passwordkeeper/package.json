@@ -5,7 +5,7 @@
   "dependencies": {
     "bootstrap": "^4.2.1",
     "crypto-js": "^3.1.9-1",
-    "firebase": "^5.8.2",
+    "firebase": "^5.8.4",
     "re-base": "^4.0.0",
     "react": "^16.8.1",
     "react-bootstrap": "^1.0.0-beta.5",

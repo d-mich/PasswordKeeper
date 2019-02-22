@@ -10,6 +10,7 @@ import Footer from './components/Footer';
 import Welcome from './components/Welcome';
 import Profile from './components/Profile';
 import Delete from './components/Delete';
+import Info from './components/Info';
 
 class App extends Component {
 
@@ -42,18 +43,7 @@ class App extends Component {
     localStorage.setItem('userID', id);
     localStorage.setItem('userEmail', em);
     localStorage.setItem('userName', na);
-    localStorage.setItem('userPicture', pic);
-    /* this.setState({
-      userID: localStorage.getItem('userID'),
-      email: localStorage.getItem('userEmail'),
-      name: localStorage.getItem('userName'),
-      picture: localStorage.getItem('userPicture')
-    }) */
-    console.log('DATI LOCAL STORAGE:')
-    console.log(localStorage.getItem('userID'))
-    console.log(localStorage.getItem('userEmail'))
-    console.log(localStorage.getItem('userName'))
-    console.log(localStorage.getItem('userPicture'))    
+    localStorage.setItem('userPicture', pic);  
   }
 
   setLocalName(param) {
@@ -107,6 +97,7 @@ class App extends Component {
     });
   }
 
+  //DA RIVEDERE PERCHE SCRITTO MALE
   getPicture() {
     return JSON.parse(JSON.stringify(localStorage.getItem('user.photoURL')))
   }
@@ -122,7 +113,7 @@ class App extends Component {
           authenticated: true,
           loading : false         
         })
-      }else {
+      } else {
         this.setState({
           authenticated: false,
           loading : false             
@@ -131,11 +122,6 @@ class App extends Component {
     })
     this.setStateUser()
   }
-
-/*   componentWillUnmount() {
-    this.removeAuthListener();
-  } */
-
 
   render() {
     if (this.state.loading === true) {
@@ -151,74 +137,78 @@ class App extends Component {
     console.log('USER ID: '+this.state.userID)
     console.log('USER NAME: '+this.state.name)
     console.log('USER NAME: '+this.state.picture)
+    
+    if(Redirect)
+      return (
+        <div className="mainStyle">
+        <body>
+          <BrowserRouter>
+            <div>
+              {/* HEADER passando la variabile authenticated */}
+              <Header authenticated={this.state.authenticated}
+                      name={this.state.name}
+                      picture={this.state.picture}
+                      getPicture={this.getPicture}/>  
+            <Switch>
+              {/* CREO TUTTI I PATH */}
 
-    return (
-      <div className="mainStyle">
-      <body>
-        <BrowserRouter>
-          <div>
-            {/* HEADER passando la variabile authenticated */}
-            <Header authenticated={this.state.authenticated}
+              <Route exact path="/" component={Welcome}/>
+
+              <Route exact path="/login" render={(props) => 
+                    <Login setAuthenticated={this.setAuthenticated}
+                    setUserId={this.setUserId}
+                    setEmail={this.setEmail}
+                    setUserLocalStorage={this.setUserLocalStorage}
+                    setName={this.setName} 
+                    setPicture={this.setPicture}
+                    setLocalUser={this.setLocalUser}
+                    setStateUser={this.setStateUser}
+                    {...props}/> //per history.push
+                  } />
+              
+              {this.state.authenticated 
+              ? <>
+                  
+                  <Route exact path="/logout" render={(props) => 
+                    <Logout 
+                    userID={this.state.userID}
+                    {...props}/> //per history.push              
+                  } />
+                  
+                  <Route exact path="/profile" render={(props) => 
+                    <Profile 
+                    userID={this.state.userID}
+                    email={this.state.email}
                     name={this.state.name}
-                    picture={this.state.picture}
-                    getPicture={this.getPicture}/>  
-          <Switch>
-            {/* CREO TUTTI I PATH */}
+                    setLocalUser={this.setStateUser}
+                    {...props}/> //per history.push              
+                  } />
+                  
+                  <Route exact path="/cancellazione" render={(props) => 
+                    <Delete 
+                    userID={this.state.userID}
+                    name={this.state.name}
+                    email={this.state.email}
+                    {...props}/> //per history.push              
+                  } />
+                  <Route exact path="/info" render={(props) => 
+                    <Info />              
+                  } />
+                </>         
 
-            <Route exact path="/" component={Welcome}/>
-      
-            <Route exact path="/login" render={(props) => 
-                  <Login setAuthenticated={this.setAuthenticated}
-                  setUserId={this.setUserId}
-                  setEmail={this.setEmail}
-                  setUserLocalStorage={this.setUserLocalStorage}
-                  setName={this.setName} 
-                  setPicture={this.setPicture}
-                  setLocalUser={this.setLocalUser}
-                  setStateUser={this.setStateUser}
-                  {...props}/> //per history.push
-                } />
-            
-            {this.state.authenticated 
-            ? <>
-                
-                <Route exact path="/logout" render={(props) => 
-                  <Logout 
-                  userID={this.state.userID}
-                  {...props}/> //per history.push              
-                } />
-                
-                <Route exact path="/profile" render={(props) => 
-                  <Profile 
-                  userID={this.state.userID}
-                  email={this.state.email}
-                  name={this.state.name}
-                  setLocalUser={this.setStateUser}
-                  {...props}/> //per history.push              
-                } />
-                
-                <Route exact path="/cancellazione" render={(props) => 
-                  <Delete 
-                  userID={this.state.userID}
-                  name={this.state.name}
-                  email={this.state.email}
-                  {...props}/> //per history.push              
-                } />
-               </>         
+              : <Redirect to='/login'/> 
+              }
 
-            : <Redirect to='/login'/> 
-            }
+              {/* ROUTE NON PRESENTE: ERRORE */}
+              <Route component={Error} />
 
-            {/* ROUTE NON PRESENTE: ERRORE */}
-            <Route component={Error} />
-
-            </Switch>
-          </div>
-        </BrowserRouter>
-        <Footer />
-        </body>
-      </div>
-    );
+              </Switch>
+            </div>
+          </BrowserRouter>
+          <Footer />
+          </body>
+        </div>
+      );
   }
 }
 
