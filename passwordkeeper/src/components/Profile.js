@@ -23,6 +23,7 @@ class Profile extends Component {
     this.setPassword = this.setPassword.bind(this)
     this.setShowPasswordTrue = this.setShowPasswordTrue.bind(this)
     this.setShowPasswordFalse = this.setShowPasswordFalse.bind(this)
+    /* this.aggiungiNome = this.aggiungiNome.bind(this) */
   }
 
   setCripted = (param) => {
@@ -213,78 +214,30 @@ class Profile extends Component {
     /* cancellare dati utente */
   }
 
-  setUserData() {
-     return (
-        <div>
-          <p>AAAA</p>
-          {this.props.name === null
-          ? <div>
-              <h5>Mancano alcuni dati nel tuo profilo: </h5>
-              <Form onSubmit={this.setNamePicture} >
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Username: </Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
-                </Form.Group>
-                <Button variant="outline-light" type="submit">
-                  Aggiorna Dati
-                </Button>                       
-              </Form>
-            </div>
-            
-          : <h3>Pagina personale di {this.props.name}</h3>
-          }
-
-          {this.props.picture === null
-          ? <div>
-              <h5>Mancano alcuni dati nel tuo profilo: </h5>
-              <Form onSubmit={this.setNamePicture} >
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Foto Profilo: </Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
-                </Form.Group>
-                <Button variant="outline-light" type="submit">
-                  Aggiorna Dati
-                </Button>                       
-              </Form>
-            </div>
-          : null
-          }          
-        </div>
-      )    
-  }
-
-  aggiungiDati() {
-    localStorage.setItem('userName', 'aaa')
-  }
+/*   aggiungiNome(event) {
+    const name = this.nomeInput.value
+    localStorage.setItem('userName', name)
+    event.preventDefault()  //quando si clicca non cambia pagina e la ricarica   
+  } */
 
   render() {
     const { openNuovo, openSalvato } = this.state;
     return (
-     <div className="welcomeText">        
-     <h3>Nome: {this.props.name}</h3>
-     {this.props.name !== null
-          ? <div>
-              <h5>Mancano il nome nel tuo profilo: </h5>
-              <Form onSubmit={this.setNamePicture} >
-                <Form.Group controlId="formBasicEmail">
-                  <Form.Label>Username: </Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
-                </Form.Group>
-                <Button variant="outline-light" type="submit">
-                  Aggiorna Dati
-                </Button>                       
-              </Form>
-            </div>            
-          : <h3>Pagina personale di {this.props.name}</h3>
-        }
+      
+      <div className="welcomeText"> 
 
-        {this.props.picture !== null
+      {this.props.name === 'null'
+        ? <h3>Pagina personale di {this.props.email}</h3>
+        : <h3>Pagina personale di {this.props.name}</h3>
+        }     
+     
+     {/* {this.props.name === null
           ? <div>
               <h5>Mancano il nome nel tuo profilo: </h5>
-              <Form onSubmit={this.setNamePicture} >
+              <Form onSubmit={this.aggiungiNome} >
                 <Form.Group controlId="formBasicEmail">
                   <Form.Label>Username: </Form.Label>
-                  <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
+                  <Form.Control type="text" placeholder="Enter username" ref={(input) => { this.nomeInput = input }}/>
                 </Form.Group>
                 <Button variant="outline-light" type="submit">
                   Aggiorna Dati
@@ -292,7 +245,7 @@ class Profile extends Component {
               </Form>
             </div>            
           : <h3>Pagina personale di {this.props.name}</h3>
-          }
+        } */}
         <Button variant='outline-light' className="accountSalvati"
         onClick={() => this.setState({ openNuovo: false , openSalvato: !openSalvato})}
         aria-controls="collapse-account-salvati"

@@ -2,7 +2,7 @@ import React, { Component } from 'react';
 import {Navbar, Nav, Form, Dropdown, Button, ButtonGroup, DropdownButton } from 'react-bootstrap';
 import UserLogin from '../user-login.png';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
-import { FiUser, FiMenu, FiInfo, FiTrash2, FiLogOut } from 'react-icons/fi';
+import { FiUser, FiUserCheck, FiMenu, FiInfo, FiTrash2, FiLogOut } from 'react-icons/fi';
 import Delete from './Delete';
 
 class Header extends Component {
@@ -20,18 +20,20 @@ class Header extends Component {
           <Navbar bg="dark" variant="dark">
             <Navbar.Brand href="/">Password Keeper</Navbar.Brand>
             <Nav className="mr-auto"></Nav>
-            <Form inline>             
-              {this.props.authenticated
-              ? <Button variant="outline" href="/profile" size="sm">
-                  <img className="immagineUtente" src={this.props.picture} alt="UserPicture"/>
-                </Button>
-              : <Button variant="outline" href="/login" size="sm" onClick={this.openModal}>
-                  <FiUser className="fiUser"/>
-                </Button>
-              }
+            <Form inline>
               {this.props.authenticated
               /* SE AUTENTICATO RITORNA: */
-              ? <Dropdown
+              ? 
+                <>
+                {this.props.picture === 'null'
+                  ? <Button variant="outline" href="/profile" size="sm">
+                      <FiUserCheck className="fiUser"/>
+                    </Button>
+                  : <Button variant="outline" href="/profile" size="sm">
+                      <img className="immagineUtente" src={this.props.picture} alt="UserPicture"/>
+                    </Button> 
+                }                
+                <Dropdown
                   variant="dark" >
                   <Dropdown.Toggle variant="dark" className="dropdown-split-basic">
                     <FiMenu/>                 
@@ -56,8 +58,12 @@ class Header extends Component {
                       </Dropdown.Item>                      
                     </DropdownMenu>                  
                 </Dropdown>
+                </>
+                
               /* ALTRIMENTI RITORNA: */
-              : null
+              : <Button variant="outline" href="/login" size="sm" onClick={this.openModal}>
+                  <FiUser className="fiUser"/>
+                </Button>
               }
               </Form>
             </Navbar>

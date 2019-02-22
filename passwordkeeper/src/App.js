@@ -191,10 +191,9 @@ class App extends Component {
                 <Route exact path="/profile" render={(props) => 
                   <Profile 
                   userID={this.state.userID}
+                  email={this.state.email}
                   name={this.state.name}
-                  setLocalName={this.setLocalName}
-                  setLocalPicture={this.setLocalPicture}
-                  setStateUser={this.setStateUser}
+                  setLocalUser={this.setStateUser}
                   {...props}/> //per history.push              
                 } />
                 
