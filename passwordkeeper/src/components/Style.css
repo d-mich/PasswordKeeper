@@ -3,7 +3,12 @@
     max-width: 100;
     margin: "0 auto";
     background-color: #515A5A;
+    
 }
+
+body {
+    background-color: #515A5A;
+  }
 
 /* HEADER */
 .dropdownMenu {
@@ -171,3 +176,16 @@
     margin-top: 50px;
     text-align: center
 }
+
+.txtdelete{
+    color: white;
+}
+
+/* Loading */
+.loading    {
+    position: fixed;
+    left: 46%;
+    top: 35%;
+    z-index: 1000;
+}
+

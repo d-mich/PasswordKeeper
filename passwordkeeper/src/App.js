@@ -140,8 +140,8 @@ class App extends Component {
   render() {
     if (this.state.loading === true) {
       return (
-        <div style={{ textAlign: "center", position: "absolute", top: "25%", left: "50%" }}>
-          <h3>Loading</h3>
+        <div className="loading">
+          Loading
           <RingLoader />
         </div>
       )
@@ -154,7 +154,7 @@ class App extends Component {
 
     return (
       <div className="mainStyle">
-      <style>{'body { background-color: #515A5A; }'}</style>
+      <body>
         <BrowserRouter>
           <div>
             {/* HEADER passando la variabile authenticated */}
@@ -217,6 +217,7 @@ class App extends Component {
           </div>
         </BrowserRouter>
         <Footer />
+        </body>
       </div>
     );
   }
