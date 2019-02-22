@@ -213,12 +213,86 @@ class Profile extends Component {
     /* cancellare dati utente */
   }
 
+  setUserData() {
+     return (
+        <div>
+          <p>AAAA</p>
+          {this.props.name === null
+          ? <div>
+              <h5>Mancano alcuni dati nel tuo profilo: </h5>
+              <Form onSubmit={this.setNamePicture} >
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Username: </Form.Label>
+                  <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
+                </Form.Group>
+                <Button variant="outline-light" type="submit">
+                  Aggiorna Dati
+                </Button>                       
+              </Form>
+            </div>
+            
+          : <h3>Pagina personale di {this.props.name}</h3>
+          }
+
+          {this.props.picture === null
+          ? <div>
+              <h5>Mancano alcuni dati nel tuo profilo: </h5>
+              <Form onSubmit={this.setNamePicture} >
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Foto Profilo: </Form.Label>
+                  <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
+                </Form.Group>
+                <Button variant="outline-light" type="submit">
+                  Aggiorna Dati
+                </Button>                       
+              </Form>
+            </div>
+          : null
+          }          
+        </div>
+      )    
+  }
+
+  aggiungiDati() {
+    localStorage.setItem('userName', 'aaa')
+  }
+
   render() {
     const { openNuovo, openSalvato } = this.state;
     return (
-     <div className="welcomeText">
-        <h3>Pagina personale di {this.props.name}</h3>
+     <div className="welcomeText">        
+     <h3>Nome: {this.props.name}</h3>
+     {this.props.name !== null
+          ? <div>
+              <h5>Mancano il nome nel tuo profilo: </h5>
+              <Form onSubmit={this.setNamePicture} >
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Username: </Form.Label>
+                  <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
+                </Form.Group>
+                <Button variant="outline-light" type="submit">
+                  Aggiorna Dati
+                </Button>                       
+              </Form>
+            </div>            
+          : <h3>Pagina personale di {this.props.name}</h3>
+        }
 
+        {this.props.picture !== null
+          ? <div>
+              <h5>Mancano il nome nel tuo profilo: </h5>
+              <Form onSubmit={this.setNamePicture} >
+                <Form.Group controlId="formBasicEmail">
+                  <Form.Label>Username: </Form.Label>
+                  <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
+                </Form.Group>
+                <Button variant="outline-light" type="submit">
+                  Aggiorna Dati
+                </Button>                       
+              </Form>
+            </div>            
+          : <h3>Pagina personale di {this.props.name}</h3>
+          }
         <Button variant='outline-light' className="accountSalvati"
         onClick={() => this.setState({ openNuovo: false , openSalvato: !openSalvato})}
         aria-controls="collapse-account-salvati"

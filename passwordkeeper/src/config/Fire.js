@@ -17,4 +17,4 @@ const providerFacebook = new firebase.auth.FacebookAuthProvider()
 
 const base = Rebase.createClass(fire.database())
 
-export {fire, base, providerGoogle, providerFacebook }
+export { fire, base, providerGoogle, providerFacebook }

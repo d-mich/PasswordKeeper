@@ -28,7 +28,14 @@ class App extends Component {
     this.setEmail = this.setEmail.bind(this)
     this.setName = this.setName.bind(this)
     this.setPicture = this.setPicture.bind(this)
-    this.setStateUser = this.setStateUser.bind(this)  
+    this.setStateUser = this.setStateUser.bind(this)
+    this.setLocalName = this.setLocalName.bind(this)
+    this.setLocalPicture = this.setLocalPicture.bind(this)
+  }
+
+  handleSubmit(e) {
+    alert('The value is: ' + this.input.value);
+    e.preventDefault();
   }
 
   setLocalUser(id, em, na, pic) {
@@ -47,6 +54,14 @@ class App extends Component {
     console.log(localStorage.getItem('userEmail'))
     console.log(localStorage.getItem('userName'))
     console.log(localStorage.getItem('userPicture'))    
+  }
+
+  setLocalName(param) {
+    localStorage.setItem('userName', param);
+  }
+
+  setLocalPicture(param) {
+    localStorage.setItem('userPicture', param);
   }
 
   setStateUser() {
@@ -177,6 +192,9 @@ class App extends Component {
                   <Profile 
                   userID={this.state.userID}
                   name={this.state.name}
+                  setLocalName={this.setLocalName}
+                  setLocalPicture={this.setLocalPicture}
+                  setStateUser={this.setStateUser}
                   {...props}/> //per history.push              
                 } />
                 
