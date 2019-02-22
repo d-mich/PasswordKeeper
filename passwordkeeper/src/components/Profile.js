@@ -23,6 +23,8 @@ class Profile extends Component {
     this.setPassword = this.setPassword.bind(this)
     this.setShowPasswordTrue = this.setShowPasswordTrue.bind(this)
     this.setShowPasswordFalse = this.setShowPasswordFalse.bind(this)
+    this.modificaDatiFacebook = this.modificaDatiFacebook.bind(this)
+    this.getIndex = this.getIndex.bind(this)
     /* this.aggiungiNome = this.aggiungiNome.bind(this) */
   }
 
@@ -127,23 +129,6 @@ class Profile extends Component {
       }); 
   }
 
-  modificaDatiFacebook (event) {
-      event.preventDefault()  //quando si clicca non cambia pagina e la ricarica
-      const account = this.accountFacebook.value
-      const username = this.usernameFacebook.value
-      const password = this.passwordFacebook.value
-  
-      //import libreria
-      var CryptoJS = require("crypto-js"); 
-      //chiave
-      var chiave = this.chiaveCifratura(this.state.userID)  
-      // Decrypt
-      var bytes = CryptoJS.AES.decrypt(password.toString(), chiave);
-      var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-      console.log("PASSWORD DECRIPTATA: "+plaintext)
-
-  }
-
   updateSingleData(email){
     fire.database().ref('users/').update({
         email,
@@ -220,6 +205,28 @@ class Profile extends Component {
     event.preventDefault()  //quando si clicca non cambia pagina e la ricarica   
   } */
 
+  getIndex = (e) => {
+    alert(e.target.entry)
+  }
+  
+  modificaDatiFacebook (event, index) {      
+    //const account = this.accountFacebook.value
+    //const username = this.usernameFacebook.value
+    const password = this.passwordFacebook.value
+
+    //import libreria
+    var CryptoJS = require("crypto-js"); 
+    //chiave
+    var chiave = this.chiaveCifratura(this.state.userID)  
+    // Decrypt
+    var bytes = CryptoJS.AES.decrypt(password.toString(), chiave);
+    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+    console.log("PASSWORD DECRIPTATA: "+plaintext)
+    alert(index)
+    this.passwordFacebook.value = plaintext
+    event.preventDefault()  //quando si clicca non cambia pagina e la ricarica
+}
+
   render() {
     const { openNuovo, openSalvato } = this.state;
     return (
@@ -260,71 +267,32 @@ class Profile extends Component {
         </Button>
         <Collapse in={this.state.openSalvato}>
           <div className="nuovoAccountStyle" id="collapse-account-salvati">
-          
-           
 
            {this.state.account.map((account, index) => (
-
-              <div>
-
-                {account === 'twitter'
-                  ? <>
-                      {account}
-                      <br/>
-                      {this.state.username[index]}
-                      <br/>
-                      {this.decriptaPassword(this.state.password[index])}
-                      <br/>
-                      <Button className="formPassword" variant="dark" type="submit"
-                      >
-                        <FiEye className="iconeForm"/>
-                      </Button>
-                      <Button className="formEdit" variant="dark" 
-                      onClick={this.handleClick(index)}>
-                        <FiEdit className="iconeForm"/>
-                      </Button>
-                    </>
-                  : null
-                }
-
-                {account === 'facebook'
-                  ? 
-                    <Form onSubmit={(event) => { this.modificaDatiFacebook(event, index) }} ref={(form) => { this.formFacebook = form }}>
+            <div>
+                  <Form onSubmit={(event) => {this.modificaDatiFacebook(event, index)}}>
+                  <Form.Group controlId="formBasicInput">
+                    <Form.Label>Account</Form.Label>
+                    <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
                     <Form.Group controlId="formBasicInput">
-                      <Form.Label>Account</Form.Label>
-                      <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
-                      <Form.Group controlId="formBasicInput">
-                        <Form.Label>Username</Form.Label>
-                        <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
-                      </Form.Group>
-                      <Form.Group controlId="formBasicPassword">
-                        <Form.Label>Password</Form.Label>
-                        <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
-                      </Form.Group>
-                      <Button className="formPassword" variant="dark" type="submit"
-                      onClick={() => {
-                        let pass = [...this.state.password]
-                        pass[index] = 'bbb'
-                        this.setState({
-                          pass
-                        })
-                      }}>
-                        <FiEye className="iconeForm"/>
-                      </Button>
-                      <Button className="formEdit" variant="dark" type="submit">
-                        <FiEdit className="iconeForm"/>
-                      </Button>
-                    </Form>
-                  : null
-                }
-
-                
-                   
-                                                       
+                      <Form.Label>Username</Form.Label>
+                      <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
+                    </Form.Group>
+                    <Form.Group controlId="formBasicPassword">
+                      <Form.Label>Password</Form.Label>
+                      <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
+                    </Form.Group>
+                    <Button className="formPassword" variant="dark" type="submit">
+                      <FiEye className="iconeForm"/>
+                    </Button>
+                    <Button className="formEdit" variant="dark"
+                    onClick={(event) => this.getIndex(event, index)}>
+                      <FiEdit className="iconeForm"/>
+                    </Button> 
+                  </Form>
+               
             </div>
-           
            ))}
-
           </div>
         </Collapse>
         
@@ -340,11 +308,11 @@ class Profile extends Component {
             </Form.Group>
             <Form.Group controlId="formBasicInput">
               <Form.Label>Username</Form.Label>
-              <Form.Control type="text" placeholder="Enter username" value="" ref={(input) => { this.usernameInput = input }}/>
+              <Form.Control type="text" placeholder="Enter username" ref={(input) => { this.usernameInput = input }}/>
             </Form.Group>
             <Form.Group controlId="formBasicPassword">
               <Form.Label>Password</Form.Label>
-              <Form.Control type="password" placeholder="Password" value="" ref={(input) => { this.passwordInput = input }}/>
+              <Form.Control type="password" placeholder="Password" ref={(input) => { this.passwordInput = input }}/>
             </Form.Group>
             <Button variant="dark" type="submit" 
             onClick={() => this.setState({ openNuovo: false })}>
