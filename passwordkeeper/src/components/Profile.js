@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { fire } from '../config/Fire';
 import { Form, Button, Collapse } from 'react-bootstrap';
-import { FiEye, FiEyeOff, FiEdit } from 'react-icons/fi';
+import { FiEye, FiEyeOff, FiEdit, FiTrash2 } from 'react-icons/fi';
  
 class Profile extends Component {
   constructor(props) {
@@ -23,7 +23,9 @@ class Profile extends Component {
     this.setPassword = this.setPassword.bind(this)
     this.setShowPasswordTrue = this.setShowPasswordTrue.bind(this)
     this.setShowPasswordFalse = this.setShowPasswordFalse.bind(this)
-    this.modificaDatiFacebook = this.modificaDatiFacebook.bind(this)
+    this.modificaDati = this.modificaDati.bind(this)
+    this.eliminaDatiAccount = this.eliminaDatiAccount.bind(this)
+    this.decriptaPassword = this.decriptaPassword.bind(this)
     /* this.aggiungiNome = this.aggiungiNome.bind(this) */
   }
 
@@ -155,7 +157,7 @@ class Profile extends Component {
   }
 
   aggiungiDati(event) {
-    event.preventDefault()  //quando si clicca non cambia pagina e la ricarica
+    //event.preventDefault()  //quando si clicca non cambia pagina e la ricarica
     const accountNuovo = this.accountInput.value
     const usernameNuovo = this.usernameInput.value
     const passwordNuovo = this.passwordInput.value
@@ -203,12 +205,8 @@ class Profile extends Component {
     localStorage.setItem('userName', name)
     event.preventDefault()  //quando si clicca non cambia pagina e la ricarica   
   } */
-  
-  modificaDatiFacebook (event, index) {      
-    //const account = this.accountFacebook.value
-    //const username = this.usernameFacebook.value
-    //const password = this.passwordFacebook.value
 
+  decriptaPassword(event, index) {
     //import libreria
     var CryptoJS = require("crypto-js"); 
     //chiave
@@ -217,10 +215,33 @@ class Profile extends Component {
     var bytes = CryptoJS.AES.decrypt(this.state.password[index].toString(), chiave);
     var plaintext = bytes.toString(CryptoJS.enc.Utf8);
     console.log("PASSWORD DECRIPTATA: "+plaintext)
-    alert(plaintext)
+    //alert(plaintext)
     this.state.password[index] = plaintext
+    event.preventDefault()  //quando si clicca non cam    
+  }
+  
+  modificaDati (event, index) {      
     event.preventDefault()  //quando si clicca non cambia pagina e la ricarica
-}
+
+    //import libreria
+    var CryptoJS = require("crypto-js"); 
+    //chiave
+    var chiave = this.chiaveCifratura(this.state.userID)
+    // Encrypt
+    var ciphertext = CryptoJS.AES.encrypt(this.state.password[index], chiave);    
+
+    this.setCripted(true)
+
+    this.writeUserData(this.state.userID, this.state.account[index], this.state.username[index], ciphertext.toString())
+    //this.readUserData(this.props.userID)
+  }
+
+  eliminaDatiAccount (event, acc) {
+    //alert('users/' + this.this.state.userID + '/' + acc)
+    fire.database().ref('users/' + this.state.userID + '/' + acc).remove();
+    //event.preventDefault()
+    //aggiornare state altrimenti rimane visualizzato
+  }
 
   render() {
     const { openNuovo, openSalvato } = this.state;
@@ -265,50 +286,32 @@ class Profile extends Component {
 
            {this.state.account.map((account, index) => (
             <div>
-               <Form onSubmit={(event) => {this.modificaDatiFacebook(event, index)}}>
+              <br/>
+               <Form>
                 <Form.Group controlId="formBasicInput">
                   <Form.Label>Account</Form.Label>
-                  <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
+                  <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountForm = input }}/>              </Form.Group>
                   <Form.Group controlId="formBasicInput">
                     <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
+                    <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameForm = input }}/>
                   </Form.Group>
                   <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
-                    <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
+                    <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordForm = input }}/>
                   </Form.Group>
-                  <Button className="formPassword" variant="dark" type="submit">
-                    <FiEye className="iconeForm"/>
-                  </Button>
-                  <Button className="formEdit" variant="dark">
-                    <FiEdit className="iconeForm"/>
-                  </Button> 
-                </Form>
-               
-
-             { /* {account === 'twitter'
-                ? <Form onSubmit={(event) => {this.modificaDatiFacebook(event, index)}}>
-                <Form.Group controlId="formBasicInput">
-                  <Form.Label>Account</Form.Label>
-                  <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
-                  <Form.Group controlId="formBasicInput">
-                    <Form.Label>Username</Form.Label>
-                    <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
-                  </Form.Group>
-                  <Form.Group controlId="formBasicPassword">
-                    <Form.Label>Password</Form.Label>
-                    <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
-                  </Form.Group>
-                  <Button className="formPassword" variant="dark" type="submit">
+                  <Button className="formPassword" variant="dark" type="submit"
+                  onClick={(event) => {this.decriptaPassword(event, index)}}>
                     <FiEye className="iconeForm"/>
                   </Button>
                   <Button className="formEdit" variant="dark"
-                  onClick={(event) => this.getIndex(event, index)}>
+                  onClick={(event) => {this.modificaDati(event, index)}}>
                     <FiEdit className="iconeForm"/>
+                  </Button>
+                  <Button className="formDelete" variant="dark" type="submit"
+                    onClick={(event) => {this.eliminaDatiAccount(event, account)}}>
+                    <FiTrash2 className="iconeForm"/>
                   </Button> 
                 </Form>
-                : null
-              } */}
             </div>
            ))}
           </div>
@@ -323,12 +326,6 @@ class Profile extends Component {
               <Form.Label>Username</Form.Label>
               <Form.Control type="text" placeholder="Enter username" ref={(input) => { this.accountInput = input }}/>
             </Form.Group>
-            {/*<Form.Control as="select">
-               <option>Facebook</option>
-              <option>Twitter</option>
-              <option>Github</option>
-              <option>Email</option>
-              <option>Altro</option> */}
             </Form.Group>
             <Form.Group controlId="formBasicInput">
               <Form.Label>Username</Form.Label>
