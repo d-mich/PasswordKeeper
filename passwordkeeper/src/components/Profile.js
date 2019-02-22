@@ -24,7 +24,6 @@ class Profile extends Component {
     this.setShowPasswordTrue = this.setShowPasswordTrue.bind(this)
     this.setShowPasswordFalse = this.setShowPasswordFalse.bind(this)
     this.modificaDatiFacebook = this.modificaDatiFacebook.bind(this)
-    this.getIndex = this.getIndex.bind(this)
     /* this.aggiungiNome = this.aggiungiNome.bind(this) */
   }
 
@@ -204,26 +203,22 @@ class Profile extends Component {
     localStorage.setItem('userName', name)
     event.preventDefault()  //quando si clicca non cambia pagina e la ricarica   
   } */
-
-  getIndex = (e) => {
-    alert(e.target.entry)
-  }
   
   modificaDatiFacebook (event, index) {      
     //const account = this.accountFacebook.value
     //const username = this.usernameFacebook.value
-    const password = this.passwordFacebook.value
+    //const password = this.passwordFacebook.value
 
     //import libreria
     var CryptoJS = require("crypto-js"); 
     //chiave
     var chiave = this.chiaveCifratura(this.state.userID)  
     // Decrypt
-    var bytes = CryptoJS.AES.decrypt(password.toString(), chiave);
+    var bytes = CryptoJS.AES.decrypt(this.state.password[index].toString(), chiave);
     var plaintext = bytes.toString(CryptoJS.enc.Utf8);
     console.log("PASSWORD DECRIPTATA: "+plaintext)
-    alert(index)
-    this.passwordFacebook.value = plaintext
+    alert(plaintext)
+    this.state.password[index] = plaintext
     event.preventDefault()  //quando si clicca non cambia pagina e la ricarica
 }
 
@@ -270,27 +265,50 @@ class Profile extends Component {
 
            {this.state.account.map((account, index) => (
             <div>
-                  <Form onSubmit={(event) => {this.modificaDatiFacebook(event, index)}}>
+               <Form onSubmit={(event) => {this.modificaDatiFacebook(event, index)}}>
+                <Form.Group controlId="formBasicInput">
+                  <Form.Label>Account</Form.Label>
+                  <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
                   <Form.Group controlId="formBasicInput">
-                    <Form.Label>Account</Form.Label>
-                    <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
-                    <Form.Group controlId="formBasicInput">
-                      <Form.Label>Username</Form.Label>
-                      <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
-                    </Form.Group>
-                    <Form.Group controlId="formBasicPassword">
-                      <Form.Label>Password</Form.Label>
-                      <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
-                    </Form.Group>
-                    <Button className="formPassword" variant="dark" type="submit">
-                      <FiEye className="iconeForm"/>
-                    </Button>
-                    <Button className="formEdit" variant="dark"
-                    onClick={(event) => this.getIndex(event, index)}>
-                      <FiEdit className="iconeForm"/>
-                    </Button> 
-                  </Form>
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
+                  </Form.Group>
+                  <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
+                  </Form.Group>
+                  <Button className="formPassword" variant="dark" type="submit">
+                    <FiEye className="iconeForm"/>
+                  </Button>
+                  <Button className="formEdit" variant="dark">
+                    <FiEdit className="iconeForm"/>
+                  </Button> 
+                </Form>
                
+
+             { /* {account === 'twitter'
+                ? <Form onSubmit={(event) => {this.modificaDatiFacebook(event, index)}}>
+                <Form.Group controlId="formBasicInput">
+                  <Form.Label>Account</Form.Label>
+                  <Form.Control type="text" placeholder="Enter account" value={account} ref={(input) => { this.accountFacebook = input }}/>              </Form.Group>
+                  <Form.Group controlId="formBasicInput">
+                    <Form.Label>Username</Form.Label>
+                    <Form.Control type="text" placeholder="Enter username" value={this.state.username[index]} ref={(input) => { this.usernameFacebook = input }}/>
+                  </Form.Group>
+                  <Form.Group controlId="formBasicPassword">
+                    <Form.Label>Password</Form.Label>
+                    <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordFacebook = input }}/>
+                  </Form.Group>
+                  <Button className="formPassword" variant="dark" type="submit">
+                    <FiEye className="iconeForm"/>
+                  </Button>
+                  <Button className="formEdit" variant="dark"
+                  onClick={(event) => this.getIndex(event, index)}>
+                    <FiEdit className="iconeForm"/>
+                  </Button> 
+                </Form>
+                : null
+              } */}
             </div>
            ))}
           </div>
@@ -300,11 +318,17 @@ class Profile extends Component {
         <div className="nuovoAccountStyle" id="collapse-account-nuovo">
           <Form onSubmit={(event) => { this.aggiungiDati(event) }} ref={(form) => { this.accountForm = form }}>
           <Form.Group controlId="formBasicInput">
-              <Form.Label>Account</Form.Label>
-              <Form.Control type="text" placeholder="Enter account" ref={(input) => { this.accountInput = input }}/>
-              <Form.Text className="textAccount">
-                Es: Facebook, Twitter..
-              </Form.Text>
+            <Form.Label>Example select</Form.Label>            
+            <Form.Group controlId="formBasicInput">
+              <Form.Label>Username</Form.Label>
+              <Form.Control type="text" placeholder="Enter username" ref={(input) => { this.accountInput = input }}/>
+            </Form.Group>
+            {/*<Form.Control as="select">
+               <option>Facebook</option>
+              <option>Twitter</option>
+              <option>Github</option>
+              <option>Email</option>
+              <option>Altro</option> */}
             </Form.Group>
             <Form.Group controlId="formBasicInput">
               <Form.Label>Username</Form.Label>
