@@ -142,7 +142,7 @@ class App extends Component {
       return (
         <div className="loading">
           Loading
-          <RingLoader />
+          <RingLoader color={"white"}/>
         </div>
       )
     }
