@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { fire } from '../config/Fire';
 import { Form, Button, Collapse, Modal } from 'react-bootstrap';
 import { FiEye, FiEyeOff, FiEdit, FiTrash2 } from 'react-icons/fi';
+import StyleProfile from './StyleProfile.css';
  
 class Profile extends Component {
   constructor(props) {

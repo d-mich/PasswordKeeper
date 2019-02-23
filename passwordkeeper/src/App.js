@@ -12,6 +12,7 @@ import Profile from './components/Profile';
 import Delete from './components/Delete';
 import Info from './components/Info';
 
+
 class App extends Component {
 
   constructor() {
@@ -133,12 +134,6 @@ class App extends Component {
       )
     }
 
-    console.log('AUTHENTICATED: '+this.state.authenticated)
-    console.log('USER ID: '+this.state.userID)
-    console.log('USER NAME: '+this.state.name)
-    console.log('USER NAME: '+this.state.picture)
-    
-    if(Redirect)
       return (
         <div className="mainStyle">
         <body>
@@ -151,8 +146,8 @@ class App extends Component {
                       getPicture={this.getPicture}/>  
             <Switch>
               {/* CREO TUTTI I PATH */}
-
-              <Route exact path="/" component={Welcome}/>
+              
+               <Route exact path="/" component={Welcome}/>
 
               <Route exact path="/login" render={(props) => 
                     <Login setAuthenticated={this.setAuthenticated}
@@ -211,5 +206,6 @@ class App extends Component {
       );
   }
 }
+
 
 export default App;

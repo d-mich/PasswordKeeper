@@ -1,5 +1,6 @@
 /* APP */
 .mainStyle {
+     overflow:auto;
     max-width: 100;
     margin-bottom:35px;
     background-color: #515A5A;
@@ -11,71 +12,15 @@ body {
     bottom:25px;
   }
 
-/* HEADER */
-.dropdownMenu {
-    width: 200px;
-    height: 160px;
-    margin-right: 138px; 
-    margin-top: 11px;
-    background-color: #343A40;
-}
-
-.immagineUtente {
-    width: 30px;
-    height: 30px;
-    border-radius: 20px
-}
-
-.fiUser {
-    width: 30px;
-    height: 30px;
-    color:white;
-    border: 2px solid white;
-    border-radius: 20px;
-}
-
-.iconaAccesso {
-    margin-top: -4px;
-    margin-left: 0.5px;
-    margin-right: 9px;
-    border: 1px solid white;
-    border-radius: 20px;
-}
-
-.iconaUscita {
-    margin-top: -3px;
-    margin-bottom: 1px;
-    margin-left: 2px;
-    margin-right: 8px;
-}
-
-.iconeDropdown {
-    margin-top: -3px;
-    margin-bottom: 1px;
-    margin-right: 10px;
-}
-
-.dropdownHeader {
-    color: white;
-}
-
-.dropdown-toggle::after {
-    display: none;
-}
-
-.dropdownDivider {
-    margin-top: 5px;
-    margin-bottom: 5px;
-}
-
 
 /* FOOTER */
 .footer-copyright {
+
+    padding-bottom:150px;
     color: white;
     position: relative; 
     width: 100%;
     bottom: 0;
-    width: 100%;
 }
 
 /* WELCOME */
@@ -120,66 +65,6 @@ body {
     height: 30;
 } 
 
-/* PROFILE */
-.nuovoAccountStyle {
-    margin: auto;
-    margin-top: 30px;
-    width: 80%;
-    border: 10px;
-    color: white;
-}
-
-.accountSalvati {
-    margin-top : 30px; 
-    margin-right: 30px;
-}
-
-.accountAggiungi {
-    margin-top : 30px;
-}
-
-.textAccount {
-    color: white;
-}
-
-.tableAccountSalvati {
-    margin-top: 50px;
-    margin-left: 70px;
-    border: 2px;
-    width: 100;
-}
-
-.tableAccount {
-    width: 300px;
-    margin-left: 10px;
-}
-
-.passwordButton {
-    border: none;
-    background: none;
-}
-
-.formPassword {
-    margin-right: 30px;
-    background: none;
-    border: none;
-}
-
-.formEdit {
-    background: none;
-    border: none;
-}
-
-.formDelete {
-    margin-left: 30px;
-    background: none;
-    border: none;
-}
-
-.iconeForm {
-    width: 30px;
-    height: 30px;
-}
 
 /* DELETE */
 
@@ -221,4 +106,3 @@ body {
 	font-size: 30px;
 	font-weight: 400;
 }
-

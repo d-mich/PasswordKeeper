@@ -1,0 +1,60 @@
+/* PROFILE */
+.nuovoAccountStyle {
+    margin: auto;
+    margin-top: 30px;
+    width: 80%;
+    border: 10px;
+    color: white;
+}
+
+.accountSalvati {
+    margin-top : 30px; 
+    margin-right: 30px;
+}
+
+.accountAggiungi {
+    margin-top : 30px;
+}
+
+.textAccount {
+    color: white;
+}
+
+.tableAccountSalvati {
+    margin-top: 50px;
+    margin-left: 70px;
+    border: 2px;
+    width: 100;
+}
+
+.tableAccount {
+    width: 300px;
+    margin-left: 10px;
+}
+
+.passwordButton {
+    border: none;
+    background: none;
+}
+
+.formPassword {
+    margin-right: 30px;
+    background: none;
+    border: none;
+}
+
+.formEdit {
+    background: none;
+    border: none;
+}
+
+.formDelete {
+    margin-left: 30px;
+    background: none;
+    border: none;
+}
+
+.iconeForm {
+    width: 30px;
+    height: 30px;
+}

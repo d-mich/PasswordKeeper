@@ -4,6 +4,8 @@ import UserLogin from '../user-login.png';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import { FiUser, FiUserCheck, FiMenu, FiInfo, FiTrash2, FiLogOut } from 'react-icons/fi';
 import Delete from './Delete';
+import StyleHeader from './StyleHeader.css';
+
 
 class Header extends Component {
 
