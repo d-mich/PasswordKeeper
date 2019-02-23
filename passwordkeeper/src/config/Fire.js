@@ -11,8 +11,6 @@ const config = {
   };
 const fire = firebase.initializeApp(config);
 
-//email
-const providerEmail = new firebase.auth.EmailAuthProvider()
 //google
 const providerGoogle = new firebase.auth.GoogleAuthProvider();
 //facebook
@@ -20,4 +18,4 @@ const providerFacebook = new firebase.auth.FacebookAuthProvider();
 //email
 const base = Rebase.createClass(fire.database())
 
-export { fire, base, providerEmail, providerGoogle, providerFacebook }
+export { fire, base, providerGoogle, providerFacebook }

@@ -9,7 +9,7 @@ class Footer extends Component {
 
   render() {
     return (
-      <footer className="footer-copyright">
+      <footer>
         <ul>
             &copy; {this.state.year} Password Keeper
         </ul>

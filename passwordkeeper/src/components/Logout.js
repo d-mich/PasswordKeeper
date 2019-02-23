@@ -3,7 +3,6 @@ import { Redirect } from 'react-router-dom'
 import { RingLoader } from 'react-spinners';
 import { fire } from '../config/Fire';
 
-
 class Logout extends Component {
   constructor() {
     super()
@@ -25,14 +24,12 @@ class Logout extends Component {
   }
 
   render() {
-      //redirect true
     if (this.state.redirect === true) {
       return <Redirect to="/" />
     }
 
-    //redirect default
     return (
-      <div style={{ textAlign: "center", position: "absolute", top: "25%", left: "50%" }}>
+      <div>
         <h3>Logging Out</h3>
         <RingLoader />
       </div>

@@ -37,10 +37,7 @@ class Delete extends Component {
       let keysToRemove = ["userID", "userName", "userEmail", "userPicture"];
       keysToRemove.forEach(k => localStorage.removeItem(k))
     }
-
-    componentWillMount() {
-    }
-  
+    
     render() {
       return (
           <div className="deleteComponents">
