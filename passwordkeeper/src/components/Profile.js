@@ -11,6 +11,7 @@ class Profile extends Component {
       account: [],
       username: [],
       password: [],
+      button: [],
       displayAccount: '',
       openNuovo: false,
       openSalvato: false,
@@ -92,11 +93,12 @@ class Profile extends Component {
           this.setState({
             account: this.state.account.concat([child.key]),
             username: this.state.username.concat([child.val().username]),
-            password: this.state.password.concat([child.val().password])
+            password: this.state.password.concat([child.val().password]),
+            button: this.state.button.concat(false),
           });
         });
             
-        const accountList = this.state.account.map((account, index) => 
+        /*const accountList = this.state.account.map((account, index) => 
                    <>
                    {account === 'facebook'
                     ? 
@@ -126,7 +128,7 @@ class Profile extends Component {
          );
          this.setState ({
           displayAccount : accountList
-         })        
+         })  */      
       }); 
   }
 
@@ -248,6 +250,7 @@ class Profile extends Component {
     this.setState({
       isButtonDisabled: true
     });
+    this.state.button[index] = true;
   }
 
   render() {
@@ -306,7 +309,7 @@ class Profile extends Component {
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordForm = input }}/>
                   </Form.Group>
-                  <Button className="formPassword" variant="dark" type="submit" disabled={this.state.isButtonDisabled}
+                  <Button className="formPassword" variant="dark" type="submit" disabled={this.state.button[index]}
                   onClick={(event) => {this.uploadFile(event,index)}}>
                     <FiEye className="iconeForm"/>
                   </Button>
@@ -343,7 +346,7 @@ class Profile extends Component {
               <Form.Label>Password</Form.Label>
               <Form.Control type="password" placeholder="Password" ref={(input) => { this.passwordInput = input }}/>
             </Form.Group>
-            <Button variant="dark" type="submit" 
+            <Button variant="outline-light" type="submit" 
             onClick={() => this.setState({ openNuovo: false })}>
               Salva
             </Button>
