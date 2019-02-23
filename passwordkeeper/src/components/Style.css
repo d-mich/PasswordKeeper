@@ -1,13 +1,14 @@
 /* APP */
 .mainStyle {
     max-width: 100;
-    margin: "0 auto";
+    margin-bottom:35px;
     background-color: #515A5A;
     
 }
 
 body {
     background-color: #515A5A;
+    bottom:25px;
   }
 
 /* HEADER */
@@ -71,8 +72,10 @@ body {
 /* FOOTER */
 .footer-copyright {
     color: white;
-    position: fixed;
+    position: relative; 
+    width: 100%;
     bottom: 0;
+    width: 100%;
 }
 
 /* WELCOME */
@@ -80,7 +83,9 @@ body {
     margin-top: 30px;
     color: white;
     text-align: center;
+    margin-bottom: 35px;
 }
+
 
 /* LOGIN */
 .loginStyle {
@@ -211,10 +216,9 @@ body {
 }
 
 #contact h3 {
-	color: #F96;
+	color: black;
 	display: block;
 	font-size: 30px;
 	font-weight: 400;
 }
-
 
