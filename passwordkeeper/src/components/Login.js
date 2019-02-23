@@ -17,6 +17,12 @@ class Login extends Component{
         this.setUser = this.setUser.bind(this)
       }
 
+      setRedirect(param) {
+        this.setState({
+          redirect: param
+        })
+      }
+
       setUser(currentUser) {
         this.setState({
           user: currentUser
@@ -52,45 +58,39 @@ class Login extends Component{
           } 
         });
       }
-    
-      authWithEmailPassword (event) {    
-        const email = this.emailInput.value
-        const password = this.passwordInput.value
-
-        event.preventDefault()  //quando si clicca non cambia pagina e la ricarica       
-
-        fire.auth().signInWithEmailAndPassword(email, password)
+  
+    authWithEmailPassword (event) {    
+      const email = this.emailInput.value
+      const password = this.passwordInput.value 
+      fire.auth().signInWithEmailAndPassword(email, password)
+        .then((result) => {              
+        //set user state
+        this.setUser(result.user)
+        //set user info
+        this.setUserInfo()    
+        //redirect
+        this.props.history.push('/profile')  
+        }).catch((error) => {
+          fire.auth().createUserWithEmailAndPassword(email, password)
           .then((result) => {              
-          //set user state
-          this.setUser(result.user)
-          //set user info
-          this.setUserInfo()    
-          //redirect
-          this.props.history.push('/profile')   
+            //set user state
+            this.setUser(result.user)
+            //set user info
+            this.setUserInfo()    
+            //redirect
+            this.props.history.push('/profile') 
           }).catch((error) => {
-            fire.auth().createUserWithEmailAndPassword(email, password)
-            .then((result) => {              
-              //set user state
-              this.setUser(result.user)
-              //set user info
-              this.setUserInfo()    
-              //redirect
-              this.props.history.push('/profile')   
-            }).catch((error) => {
-              alert("Errore account: \n"+error)
-            })
+            alert("Errore account: \n"+error)
           })
-        }
+        })
+      event.preventDefault()
+    }
 
     render() {
-        
-      if(this.state.redirect === true) {
-          return <Redirect to='/'/>
-      }
 
       return (
         <div className="loginStyle">
-          <Form onSubmit={this.authWithEmailPassword} >
+          <Form onSubmit={(event) => this.authWithEmailPassword(event)} >
           <Form.Group controlId="formBasicEmail">
             <Form.Label>Email address</Form.Label>
             <Form.Control type="email" placeholder="Enter email" ref={(input) => { this.emailInput = input }}/>
@@ -109,6 +109,7 @@ class Login extends Component{
         <br/>
         <FacebookLoginButton onClick={() => { this.authentication(providerFacebook) }}>Accedi con Facebook</FacebookLoginButton>
         <GoogleLoginButton onClick={() => { this.authentication(providerGoogle) }}>Accedi con Google</GoogleLoginButton>
+        <br/>
       </div>   
       );
     }

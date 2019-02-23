@@ -44,8 +44,8 @@ class Delete extends Component {
           <br />
           <p className="txtdelete"><h3>Sei davvero sicuro di voler cancellare il tuo account?</h3>
           <br />Le modifiche effettuate e gli account aggiunti andranno persi <br /><br /></p>
-            <Button variant="danger" onClick={this.handleShow}>
-              <h5>Cancella Account Definitivamente</h5>
+            <Button variant="danger" className="deleteButton" onClick={this.handleShow}>
+              Cancella Account Definitivamente
             </Button>
 
             <Modal show={this.state.show} onHide={this.handleClose} >
@@ -69,6 +69,7 @@ class Delete extends Component {
                 </Button>
                 </Modal.Footer>
             </Modal>
+            <br/>
           </div>          
       );
     }

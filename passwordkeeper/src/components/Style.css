@@ -30,18 +30,14 @@ html, body {
     margin-bottom: 35px;
 }
 
-
 /* LOGIN */
 .loginStyle {
+    text-align: center;
     margin: auto;
     margin-top: 30px;
     width: 80%;
     border: 10px;
     color: white;
-}
-
-.signUPButton {
-    text-align: center;
 }
 
 .buttonFacebook {
@@ -62,8 +58,7 @@ html, body {
 .defaultImage {
     width: 30;
     height: 30;
-} 
-
+}
 
 /* DELETE */
 
@@ -74,6 +69,11 @@ html, body {
 
 .txtdelete{
     color: white;
+}
+
+.deleteButton {
+    font-size: 20px;
+    margin-bottom: 20px;
 }
 
 /* Loading */
