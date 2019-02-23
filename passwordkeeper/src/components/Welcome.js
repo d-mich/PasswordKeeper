@@ -6,7 +6,8 @@ class Welcome extends Component {
   render() {
     return (
      <div className="welcomeText">
-         <h3>Benvenuto in Password Keeper</h3>
+         <h3>Benvenuto in <br/>
+         Password Keeper</h3>
          <br></br>
          <p>
              Puoi salvare le password dei tuoi account in maniera sicura.
