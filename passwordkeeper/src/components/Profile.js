@@ -242,6 +242,13 @@ class Profile extends Component {
     //event.preventDefault()
     //aggiornare state altrimenti rimane visualizzato
   }
+  uploadFile(event,index) {
+    this.decriptaPassword(event, index)
+    // ... do your things
+    this.setState({
+      isButtonDisabled: true
+    });
+  }
 
   render() {
     const { openNuovo, openSalvato } = this.state;
@@ -299,8 +306,8 @@ class Profile extends Component {
                     <Form.Label>Password</Form.Label>
                     <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordForm = input }}/>
                   </Form.Group>
-                  <Button className="formPassword" variant="dark" type="submit"
-                  onClick={(event) => {this.decriptaPassword(event, index)}}>
+                  <Button className="formPassword" variant="dark" type="submit" disabled={this.state.isButtonDisabled}
+                  onClick={(event) => {this.uploadFile(event,index)}}>
                     <FiEye className="iconeForm"/>
                   </Button>
                   <Button className="formEdit" variant="dark"
