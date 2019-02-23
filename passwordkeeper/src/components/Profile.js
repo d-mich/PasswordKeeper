@@ -21,7 +21,8 @@ class Profile extends Component {
       inputType: 'text',
       facebookForm: true,
       twitterForm: false,
-      show: false
+      show: false,
+      indexModal: null
     }
     this.setPassword = this.setPassword.bind(this)
     this.setShowPasswordTrue = this.setShowPasswordTrue.bind(this)
@@ -276,7 +277,7 @@ class Profile extends Component {
     //this.readUserData(this.props.userID)
   }
 
-  handleButtonPassword(event,index) {
+  handleShowPassword(event,index) {
     this.decriptaPassword(event, index)
     // ... do your things
     this.setState({
@@ -285,13 +286,24 @@ class Profile extends Component {
     this.state.button[index] = true;
   }
 
-  eliminaDatiAccount (event) {
+  handleHidePassword(event,index) {
+    // ... do your things
+    this.setState({
+      isButtonDisabled: false
+    });
+    this.state.button[index] = false;
+  }
+
+  eliminaDatiAccount (event, index) {
     this.handleShow()
+    this.setState ({
+      indexModal: index
+    })
     event.preventDefault()
   }
 
-  eliminaPiattaforma (event, acc) {
-    fire.database().ref('users/' + this.state.userID + '/' + acc).remove();    
+  eliminaPiattaforma (index) {
+    fire.database().ref('users/' + this.state.userID + '/' + this.state.account[index]).remove();    
     this.handleClose()
   }
 
@@ -333,12 +345,32 @@ class Profile extends Component {
           aria-expanded={openNuovo}>
           Aggiungi Account
         </Button>
+        
+        <Modal show={this.state.show} onHide={this.handleClose} >
+                <Modal.Header closeButton>
+                <Modal.Title>Cancellazione Account</Modal.Title>
+                </Modal.Header>
+                <Modal.Body>
+                    <h5>Dati account</h5>
+                    <ul>
+                        <li>Pattaforma: {this.state.account[this.state.indexModal]}</li>
+                        <li>Username: {this.state.username[this.state.indexModal]}</li>
+                    </ul>
+                </Modal.Body>
+                <Modal.Footer>
+                <Button variant="success" onClick={this.handleClose}>
+                    Annulla
+                </Button>
+                <Button variant="danger" onClick={() => this.eliminaPiattaforma(this.state.indexModal)}>
+                    Elimina
+                </Button>
+                </Modal.Footer>
+                </Modal>
+
         <Collapse in={this.state.openSalvato}>
           <div className="nuovoAccountStyle" id="collapse-account-salvati"> 
 
-            {this.state.account.map((account, index) => (
-              <div>
-                <Modal show={this.state.show} onHide={this.handleClose} >
+         {/*  <Modal show={this.state.show} onHide={this.handleClose} >
                 <Modal.Header closeButton>
                 <Modal.Title>Cancellazione Account</Modal.Title>
                 </Modal.Header>
@@ -354,11 +386,14 @@ class Profile extends Component {
                 <Button variant="success" onClick={this.handleClose}>
                     Annulla
                 </Button>
-                <Button variant="danger" onClick={(event) => this.eliminaPiattaforma(event, account)}>
+                <Button variant="danger" onClick={(event) => this.eliminaPiattaforma(event, index)}>
                     Elimina
                 </Button>
                 </Modal.Footer>
-                </Modal>
+                </Modal> */}
+
+            {this.state.account.map((account, index) => (
+              <div>
                 <br/>
                 <Form>
                   <Form.Group controlId="formBasicInput">
@@ -370,10 +405,15 @@ class Profile extends Component {
                     </Form.Group>
                     <Form.Group controlId="formBasicPassword">
                       <Form.Label>Password</Form.Label>
-                      <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordForm = input }}/>
+                      {this.state.button[index]
+                        ? //password nascosta
+                          <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordForm = input }}/>
+                        : //password visibile e decriptata
+                          <Form.Control type="password" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordForm = input }}/>
+                      }
                     </Form.Group>
                     <Button className="formPassword" variant="dark" type="submit" disabled={this.state.button[index]}
-                    onClick={(event) => {this.handleButtonPassword(event,index)}}>
+                    onClick={(event) => {this.handleShowPassword(event,index)}}>
                       <FiEye className="iconeForm"/>
                     </Button>
                     {/* <Button className="formEdit" variant="dark"
@@ -381,7 +421,7 @@ class Profile extends Component {
                       <FiEdit className="iconeForm"/>
                     </Button> */}
                     <Button className="formDelete" variant="dark" type="submit"
-                      onClick={(event) => {this.eliminaDatiAccount(event)}}>
+                      onClick={(event) => {this.eliminaDatiAccount(event, index)}}>
                       <FiTrash2 className="iconeForm"/>
                     </Button> 
                   </Form>

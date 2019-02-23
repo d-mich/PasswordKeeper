@@ -71,42 +71,29 @@ class Login extends Component{
 
         event.preventDefault()  //quando si clicca non cambia pagina e la ricarica       
 
-        fire.auth().fetchProvidersForEmail(email)
-          .then((providers) => {
-            if (providers.length === 0) {
-              // create user
-              return fire.auth().createUserWithEmailAndPassword(email, password)
-            } else if (providers.indexOf("password") === -1) {
-              // they used facebook
-              this.loginForm.reset()
-              /* this.toaster.show({ intent: Intent.WARNING, message: "Try alternative login." }) */
-            } else {
-              // sign user in
-              fire.auth().signInWithEmailAndPassword(email, password)
-              .then((result) => {
-                console.log("autenticazione "+ result.user);                
-                //set user state
-                this.setUser(result.user)
-                //set user info
-                this.setUserInfo()    
-                //redirect
-                this.props.history.push('/profile')   
-              })
-            }
+        fire.auth().signInWithEmailAndPassword(email, password)
+          .then((result) => {              
+          //set user state
+          this.setUser(result.user)
+          //set user info
+          this.setUserInfo()    
+          //redirect
+          this.props.history.push('/profile')   
+          }).catch((error) => {
+            //alert("Errore account: \n"+error)
+            fire.auth().createUserWithEmailAndPassword(email, password)
+            .then((result) => {              
+              //set user state
+              this.setUser(result.user)
+              //set user info
+              this.setUserInfo()    
+              //redirect
+              this.props.history.push('/profile')   
+            }).catch((error) => {
+              alert("Errore account: \n"+error)
+            })
           })
-          .then((user) => {
-            if (user && user.email) {
-                console.log("autenticazione email");
-                console.log("EMAIL USER ID: " + user)
-              /* this.loginForm.reset()
-              
-              this.setUser(user)        
-              this.setUserInfo()
-              this.setState({redirect: true}) */
-            }
-          })      
-          
-      }
+        }
 
     render() {
         //redirect: root

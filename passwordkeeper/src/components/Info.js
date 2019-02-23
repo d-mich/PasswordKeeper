@@ -12,7 +12,7 @@ class Info extends Component {
             <h3>Contattaci</h3><br/>
             <h6><u>Sviluppatori: </u></h6><br/>
             <h6>
-            <FiUser/> Andrea Falaschini <br/>
+            <FiUser/> Andrea Falaschini<br/>
             <FiMail/> andrea.falaschini@studenti.unicam.it
             </h6><br/>
             <h6>
