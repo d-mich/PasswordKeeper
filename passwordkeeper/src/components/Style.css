@@ -76,8 +76,8 @@ html, body {
 /* Loading */
 .loading    {
     position: fixed;
-    left: 46%;
-    top: 46%;
+    left: 43%;
+    top: 42%;
     color: white;
 }
 

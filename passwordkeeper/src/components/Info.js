@@ -1,11 +1,9 @@
-import React, { Component } from 'react';
+import React from 'react';
 import { FiMail, FiUser } from "react-icons/fi";
 // eslint-disable-next-line
 import Styles from './Style.css';
 
-class Info extends Component {
-
-  render() {
+function Info (){
     return (
       <div className="container">  
         <div id="contact">
@@ -30,7 +28,7 @@ class Info extends Component {
         </div>
       </div>
     );
-  }
+  
 }
 
 export default Info;

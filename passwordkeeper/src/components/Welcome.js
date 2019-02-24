@@ -1,10 +1,8 @@
-import React, { Component } from 'react';
+import React from 'react';
 // eslint-disable-next-line
 import Styles from './Style.css';
 
-class Welcome extends Component {
-
-  render() {
+function Welcome (){
     return (
      <div className="welcomeText">
          <h3>Benvenuto in <br/>
@@ -17,7 +15,6 @@ class Welcome extends Component {
          </p>
      </div>
     );
-  }
 }
 
 export default Welcome;
