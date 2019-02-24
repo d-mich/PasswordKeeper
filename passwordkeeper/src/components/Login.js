@@ -41,8 +41,7 @@ class Login extends Component{
 
       authentication(provider) {
         fire.auth().signInWithPopup(provider)
-        .then((result) => {
-          console.log("autenticazione "+"");                
+        .then((result) => {              
           //set user state
           this.setUser(result.user)                
           //set authenticated true
@@ -91,11 +90,9 @@ class Login extends Component{
     }
 
     render() {
-
       if (this.props.authenticated === true) {
         return <Redirect to='/profile'/>
       }
-
       return (
         <div className="loginStyle">
           <Form onSubmit={(event) => this.authWithEmailPassword(event)} >
