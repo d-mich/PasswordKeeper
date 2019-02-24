@@ -1,5 +1,4 @@
 import React, { Component } from 'react';
-import { Redirect } from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap'
 import { fire } from '../config/Fire';
 

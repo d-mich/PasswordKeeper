@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import { fire } from '../config/Fire';
 import { Form, Button, Collapse, Modal } from 'react-bootstrap';
-import { FiEye, FiEyeOff, FiEdit, FiTrash2 } from 'react-icons/fi';
+import { FiEye, FiTrash2 } from 'react-icons/fi';
 import StyleProfile from './StyleProfile.css';
  
 class Profile extends Component {
@@ -15,11 +15,9 @@ class Profile extends Component {
       button: [],
       openNuovo: false,
       openSalvato: false,
-      cripted: true,
-      show: false,  //modal
+      show: false,
       indexModal: null
     }
-    this.modificaDati = this.modificaDati.bind(this)
     this.eliminaDatiAccount = this.eliminaDatiAccount.bind(this)
     this.decriptaPassword = this.decriptaPassword.bind(this)
     this.handleShow = this.handleShow.bind(this);
@@ -32,12 +30,6 @@ class Profile extends Component {
 
   handleShow() {
     this.setState({ show: true });
-  }
-
-  setCripted = (param) => {
-    this.setState({
-      cripted: param      
-    })
   }
 
   writeUserData(userid, acc, us, pwd) {
@@ -73,70 +65,34 @@ class Profile extends Component {
     return str.split("").reverse().join("");
   }
 
-  decriptaPassword (pass) {
-    
-    /* if(this.state.cripted) { */
-       //import libreria
-      var CryptoJS = require("crypto-js"); 
-      //chiave
-      var chiave = this.chiaveCifratura(this.state.userID)
-      var bytes = CryptoJS.AES.decrypt(pass.toString(), chiave);
-      var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-      return plaintext
-  }
-
   aggiungiDati() {
     const accountNuovo = this.accountInput.value
     const usernameNuovo = this.usernameInput.value
     const passwordNuovo = this.passwordInput.value
 
-    //import libreria
-    var CryptoJS = require("crypto-js"); 
-    //chiave
-    var chiave = this.chiaveCifratura(this.state.userID)
-    // Encrypt
-    var ciphertext = CryptoJS.AES.encrypt(passwordNuovo, chiave);    
-    // Decrypt
-    var bytes = CryptoJS.AES.decrypt(ciphertext.toString(), chiave);
-    var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-
-    this.setCripted(true)
+    if (accountNuovo != '' && usernameNuovo != '' && passwordNuovo != '') {
+      var CryptoJS = require("crypto-js"); 
+      var chiave = this.chiaveCifratura(this.state.userID)
+      var ciphertext = CryptoJS.AES.encrypt(passwordNuovo, chiave);
+      this.writeUserData(this.state.userID, accountNuovo, usernameNuovo, ciphertext.toString())
+      alert("Account "+accountNuovo+" aggiunto")
+    } else {
+      alert("Tutti i campi devono essere compilati")
+      
+    }
 
     this.accountForm.reset();
-
-    this.writeUserData(this.state.userID, accountNuovo, usernameNuovo, ciphertext.toString())
-    //this.readUserData(this.props.userID)
   }
 
   decriptaPassword(event, index) {
-    //import libreria
     var CryptoJS = require("crypto-js"); 
-    //chiave
     var chiave = this.chiaveCifratura(this.state.userID)  
-    // Decrypt
     var bytes = CryptoJS.AES.decrypt(this.state.password[index].toString(), chiave);
     var plaintext = bytes.toString(CryptoJS.enc.Utf8);
-    console.log("PASSWORD DECRIPTATA: "+plaintext)
-    //alert(plaintext)
     this.state.password[index] = plaintext
-    event.preventDefault()  //quando si clicca non cam    
+    event.preventDefault()
   }
   
-  modificaDati (event, index) {      
-    event.preventDefault()  //quando si clicca non cambia pagina e la ricarica
-
-    //import libreria
-    var CryptoJS = require("crypto-js"); 
-    //chiave
-    var chiave = this.chiaveCifratura(this.state.userID)
-    // Encrypt
-    var ciphertext = CryptoJS.AES.encrypt(this.state.password[index], chiave);    
-
-    this.setCripted(true)
-
-    this.writeUserData(this.state.userID, this.state.account[index], this.state.username[index], ciphertext.toString())
-  }
-
   handleShowPassword(event,index) {
     this.decriptaPassword(event, index)
     this.setState({
@@ -167,10 +123,6 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    console.log("USER ID PROFILE: "+this.state.userID)
-    console.log("USER NAME PROFILE: "+this.props.name)
-    console.log("USER ID P: "+this.state.userID)
-    console.log("USER NAME P: "+this.state.name)
     this.readUserData(this.state.userID)
   }
 
@@ -205,7 +157,7 @@ class Profile extends Component {
     return (
       <div>
         {this.state.account.map((account, index) => (
-            <div>
+            <div key={account}>
               <br/>
               <Form>
                 <Form.Group controlId="formBasicInput">
@@ -218,20 +170,14 @@ class Profile extends Component {
                   <Form.Group controlId="formBasicPassword">
                     <Form.Label>Password</Form.Label>
                     {this.state.button[index]
-                      ? //password nascosta
-                        <Form.Control type="text" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordForm = input }}/>
-                      : //password visibile e decriptata
-                        <Form.Control type="password" placeholder="Password" value={this.state.password[index]} ref={(input) => { this.passwordForm = input }}/>
+                      ?  <Form.Control type="text" placeholder="PasswordVisibile" value={this.state.password[index]} ref={(input) => { this.passwordForm = input }}/>
+                      : <Form.Control type="password" placeholder="PasswordNascosta" value={this.state.password[index]} ref={(input) => { this.passwordForm = input }}/>
                     }
                   </Form.Group>
                   <Button className="formPassword" variant="dark" type="submit" disabled={this.state.button[index]}
                   onClick={(event) => {this.handleShowPassword(event,index)}}>
                     <FiEye className="iconeForm"/>
                   </Button>
-                  {/* <Button className="formEdit" variant="dark"
-                  onClick={(event) => {this.modificaDati(event, index)}}>
-                    <FiEdit className="iconeForm"/>
-                  </Button> */}
                   <Button className="formDelete" variant="dark" type="submit"
                     onClick={(event) => {this.eliminaDatiAccount(event, index)}}>
                     <FiTrash2 className="iconeForm"/>
@@ -276,37 +222,36 @@ class Profile extends Component {
     const { openNuovo, openSalvato } = this.state;
     return (
       <div className="welcomeText"> 
+        {this.props.name === 'null'
+          ? <h3>Pagina personale di <br/>{this.props.email}</h3>
+          : <h3>Pagina personale di <br/>{this.props.name}</h3>
+        }     
+        <Button variant='outline-light' className="accountSalvati"
+        onClick={() => this.setState({ openNuovo: false , openSalvato: !openSalvato})}
+        aria-controls="collapse-account-salvati"
+        aria-expanded={openSalvato}>
+        Account Salvati
+        </Button>
+        <Button variant='outline-light' className="accountAggiungi"
+          onClick={() => this.setState({ openSalvato: false, openNuovo: !openNuovo})}
+          aria-controls="collapse-account-nuovo"
+          aria-expanded={openNuovo}>
+          Aggiungi Account
+        </Button>
 
-      {this.props.name === 'null'
-        ? <h3>Pagina personale di <br/>{this.props.email}</h3>
-        : <h3>Pagina personale di <br/>{this.props.name}</h3>
-      }     
-      <Button variant='outline-light' className="accountSalvati"
-      onClick={() => this.setState({ openNuovo: false , openSalvato: !openSalvato})}
-      aria-controls="collapse-account-salvati"
-      aria-expanded={openSalvato}>
-      Account Salvati
-      </Button>
-      <Button variant='outline-light' className="accountAggiungi"
-        onClick={() => this.setState({ openSalvato: false, openNuovo: !openNuovo})}
-        aria-controls="collapse-account-nuovo"
-        aria-expanded={openNuovo}>
-        Aggiungi Account
-      </Button>
-
-      {this.getModal()}
-      
-      <Collapse in={this.state.openSalvato}>
-        <div className="nuovoAccountStyle" id="collapse-account-salvati">
-          {this.getSalvatiForm()}
+        {this.getModal()}
+        
+        <Collapse in={this.state.openSalvato}>
+          <div className="nuovoAccountStyle" id="collapse-account-salvati">
+            {this.getSalvatiForm()}
+          </div>
+        </Collapse>
+        
+        <Collapse in={this.state.openNuovo}>
+        <div className="nuovoAccountStyle" id="collapse-account-nuovo">
+          {this.getAggiungiForm()}
         </div>
-      </Collapse>
-      
-      <Collapse in={this.state.openNuovo}>
-      <div className="nuovoAccountStyle" id="collapse-account-nuovo">
-        {this.getAggiungiForm()}
-      </div>
-      </Collapse>
+        </Collapse>
       </div>
     );
   }

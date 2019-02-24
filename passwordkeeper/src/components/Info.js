@@ -6,7 +6,7 @@ class Info extends Component {
 
   render() {
     return (
-      <div class="container">  
+      <div className="container">  
         <div id="contact">
           <h3>Contattaci</h3><br/>
           <h6><u>Sviluppatori: </u></h6><br/>

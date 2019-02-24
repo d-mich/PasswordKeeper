@@ -85,50 +85,49 @@ class App extends Component {
                       picture={this.state.picture}/>
         </header>
         <div className="mainStyle">
-          <body>
-            <BrowserRouter>
-              <div>              
-                <Switch>            
-                  <Route exact path="/" component={Welcome}/>
+          
+          <BrowserRouter>
+            <div>              
+              <Switch>            
+                <Route exact path="/" component={Welcome}/>
 
-                  <Route path="/login" render={() => 
-                        <Login setAuthenticated={this.setAuthenticated}
-                        authenticated={this.state.authenticated}
-                        setLocalUser={this.setLocalUser}
-                        setStateUser={this.setStateUser}/>
-                      } />
-                
-                  {this.state.authenticated 
-                  ? <>                
-                    <Route path="/logout" render={() => 
-                      <Logout 
-                      userID={this.state.userID}/>              
-                    } />
-                    
-                    <Route path="/profile" render={() => 
-                      <Profile 
-                      userID={this.state.userID}
-                      email={this.state.email}
-                      name={this.state.name}
-                      setLocalUser={this.setStateUser}/>              
-                    } />
-                    
-                    <Route path="/cancellazione" render={() => 
-                      <Delete 
+                <Route path="/login" render={() => 
+                      <Login setAuthenticated={this.setAuthenticated}
                       authenticated={this.state.authenticated}
-                      userID={this.state.userID}
-                      name={this.state.name}
-                      email={this.state.email}/>           
+                      setLocalUser={this.setLocalUser}
+                      setStateUser={this.setStateUser}/>
                     } />
-                    <Route path="/info" component={Info} />                    
-                    </>   
-                  : <Redirect to='/login'/> 
-                  }
-                  <Route path="*" component={Error}/>
-                </Switch>
-              </div>
-            </BrowserRouter>
-          </body>
+              
+                {this.state.authenticated 
+                ? <>                
+                  <Route path="/logout" render={() => 
+                    <Logout 
+                    userID={this.state.userID}/>              
+                  } />
+                  
+                  <Route path="/profile" render={() => 
+                    <Profile 
+                    userID={this.state.userID}
+                    email={this.state.email}
+                    name={this.state.name}
+                    setLocalUser={this.setStateUser}/>              
+                  } />
+                  
+                  <Route path="/cancellazione" render={() => 
+                    <Delete 
+                    authenticated={this.state.authenticated}
+                    userID={this.state.userID}
+                    name={this.state.name}
+                    email={this.state.email}/>           
+                  } />
+                  <Route path="/info" component={Info} />                    
+                  </>   
+                : <Redirect to='/login'/> 
+                }
+                <Route path="*" component={Error}/>
+              </Switch>
+            </div>
+          </BrowserRouter>
           <div className="footer">
             <Footer />
           </div>
