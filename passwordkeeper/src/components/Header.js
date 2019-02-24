@@ -52,7 +52,7 @@ class Header extends Component {
                     </Dropdown.Item>
                     <Dropdown.Item className="dropdownHeader" href="/cancellazione">
                       <FiTrash2 className="iconeDropdown"/>
-                      Cancella Account
+                      Cancella Dati
                     </Dropdown.Item>
                     <Dropdown.Item className="dropdownHeader" href="/logout">
                       <FiLogOut className="iconaUscita"/>

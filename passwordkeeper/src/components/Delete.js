@@ -45,15 +45,16 @@ class Delete extends Component {
       return (
           <div className="deleteComponents">
           <br />
-          <p className="txtdelete"><h3>Sei davvero sicuro di voler cancellare il tuo account?</h3>
-          <br />Le modifiche effettuate e gli account aggiunti andranno persi <br /><br /></p>
+          <p className="txtdelete"><h3>Sei davvero sicuro di voler cancellare i dati relativi al tuo account?</h3>
+          <br />Le modifiche effettuate e gli account aggiunti andranno persi,<br/>
+             per la disattivazione dell'account contattare gli sviluppatori nella pagina info<br /><br /></p>
             <Button variant="danger" className="deleteButton" onClick={this.handleShow}>
-              Cancella Account Definitivamente
+            Cancellazione Dati Account
             </Button>
 
             <Modal show={this.state.show} onHide={this.handleClose} >
                 <Modal.Header closeButton>
-                <Modal.Title>Cancellazione Account</Modal.Title>
+                <Modal.Title>Cancellazione Dati Account</Modal.Title>
                 </Modal.Header>
                 <Modal.Body>
                     <h5>Dati account</h5>
