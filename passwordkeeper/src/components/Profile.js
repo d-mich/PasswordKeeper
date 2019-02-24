@@ -278,8 +278,8 @@ class Profile extends Component {
       <div className="welcomeText"> 
 
       {this.props.name === 'null'
-        ? <h3>Pagina personale di {this.props.email}</h3>
-        : <h3>Pagina personale di {this.props.name}</h3>
+        ? <h3>Pagina personale di <br/>{this.props.email}</h3>
+        : <h3>Pagina personale di <br/>{this.props.name}</h3>
       }     
       <Button variant='outline-light' className="accountSalvati"
       onClick={() => this.setState({ openNuovo: false , openSalvato: !openSalvato})}

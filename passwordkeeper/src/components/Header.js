@@ -40,7 +40,10 @@ class Header extends Component {
                   <DropdownMenu className="dropdownMenu">
                     <Dropdown.Item className="dropdownHeader" href="/profile">
                       <FiUser className="iconaAccesso"/>
-                      {this.props.name}
+                      {this.props.name === 'null'
+                        ? 'Profilo'
+                        : this.props.name
+                      }
                     </Dropdown.Item>
                     <Dropdown.Divider className="dropdownDivider"/>
                     <Dropdown.Item className="dropdownHeader" href="/info">

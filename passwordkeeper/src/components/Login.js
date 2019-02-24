@@ -52,10 +52,10 @@ class Login extends Component{
           //redirect
           this.props.history.push('/profile')   
         })
-        .catch(function(error) {
+        .catch((error) => {
           if(error.code === 'auth/account-exists-with-different-credential') {
             alert("Email collegata ad un altro account");
-          } 
+          } else alert("Errore login:"+error)
         });
       }
   
@@ -71,17 +71,27 @@ class Login extends Component{
         //redirect
         this.props.history.push('/profile')  
         }).catch((error) => {
-          fire.auth().createUserWithEmailAndPassword(email, password)
-          .then((result) => {              
-            //set user state
-            this.setUser(result.user)
-            //set user info
-            this.setUserInfo()    
-            //redirect
-            this.props.history.push('/profile') 
-          }).catch((error) => {
-            alert("Errore account: \n"+error)
-          })
+          if(error.code === 'auth/account-exists-with-different-credential') {
+            alert("Email collegata ad un altro account");
+          } else if (error.code === 'auth/wrong-password') {
+            alert("Password errata");
+          } else if (error.code === 'auth/user-not-found') {
+            fire.auth().createUserWithEmailAndPassword(email, password)
+            .then((result) => {              
+              //set user state
+              this.setUser(result.user)
+              //set user info
+              this.setUserInfo()    
+              //redirect
+              this.props.history.push('/profile') 
+            }).catch((error) => {
+              if(error.code === 'auth/weak-password') {
+                alert("La password deve contenere almeno 6 caratteri");
+              } else if (error.code === 'auth/invalid-email') {
+                alert("Email non valida");
+              } else alert("Errore creazione account:"+error)
+            })
+          } else alert("Errore login:"+error)
         })
       event.preventDefault()
     }

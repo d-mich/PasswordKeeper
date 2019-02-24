@@ -81,6 +81,7 @@ class App extends Component {
         <header>
           <Header authenticated={this.state.authenticated}
                       name={this.state.name}
+                      email={this.state.em}
                       picture={this.state.picture}/>
         </header>
         <div className="mainStyle">
@@ -130,11 +131,10 @@ class App extends Component {
               </div>
             </BrowserRouter>
           </body>
+          <div className="footer">
+            <Footer />
+          </div>
         </div>
-        <div class="clearfooter"></div>
-        <div className="footerDivider">
-          <Footer />
-        </div>        
       </div>
     );
   }
