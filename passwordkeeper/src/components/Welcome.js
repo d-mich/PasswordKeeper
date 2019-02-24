@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+// eslint-disable-next-line
 import Styles from './Style.css';
 
 class Welcome extends Component {

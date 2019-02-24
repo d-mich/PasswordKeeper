@@ -1,5 +1,6 @@
 import React, { Component } from 'react';
 import { FiMail, FiUser } from "react-icons/fi";
+// eslint-disable-next-line
 import Styles from './Style.css';
 
 class Info extends Component {

@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { fire } from '../config/Fire';
 import { Form, Button, Collapse, Modal } from 'react-bootstrap';
 import { FiEye, FiTrash2 } from 'react-icons/fi';
+// eslint-disable-next-line
 import StyleProfile from './StyleProfile.css';
  
 class Profile extends Component {
@@ -69,8 +70,7 @@ class Profile extends Component {
     const accountNuovo = this.accountInput.value
     const usernameNuovo = this.usernameInput.value
     const passwordNuovo = this.passwordInput.value
-
-    if (accountNuovo != '' && usernameNuovo != '' && passwordNuovo != '') {
+    if (accountNuovo !== '' && usernameNuovo !== '' && passwordNuovo !== '') {
       var CryptoJS = require("crypto-js"); 
       var chiave = this.chiaveCifratura(this.state.userID)
       var ciphertext = CryptoJS.AES.encrypt(passwordNuovo, chiave);
@@ -87,22 +87,27 @@ class Profile extends Component {
     var chiave = this.chiaveCifratura(this.state.userID)  
     var bytes = CryptoJS.AES.decrypt(this.state.password[index].toString(), chiave);
     var plaintext = bytes.toString(CryptoJS.enc.Utf8);
+    // eslint-disable-next-line
     this.state.password[index] = plaintext
     event.preventDefault()
   }
   
   handleShowPassword(event,index) {
     this.decriptaPassword(event, index)
+    // eslint-disable-next-line
     this.setState({
       isButtonDisabled: true
     });
+    // eslint-disable-next-line
     this.state.button[index] = true;
   }
 
   handleHidePassword(event,index) {
+    // eslint-disable-next-line
     this.setState({
       isButtonDisabled: false
     });
+    // eslint-disable-next-line
     this.state.button[index] = false;
   }
 

@@ -3,11 +3,12 @@ import {Navbar, Nav, Form, Dropdown, Button } from 'react-bootstrap';
 import DropdownMenu from 'react-bootstrap/DropdownMenu';
 import { FiUser, FiUserCheck, FiMenu, FiInfo, FiTrash2, FiLogOut } from 'react-icons/fi';
 import Delete from './Delete';
+// eslint-disable-next-line
 import StyleHeader from './StyleHeader.css';
 
 
 class Header extends Component {
-
+// eslint-disable-next-line
     constructor() {
         super()
     }

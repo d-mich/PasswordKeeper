@@ -3,6 +3,7 @@ import { Redirect } from 'react-router-dom';
 import { fire, providerGoogle, providerFacebook } from '../config/Fire';
 import { Button, Form } from 'react-bootstrap';
 import { FacebookLoginButton, GoogleLoginButton } from "react-social-login-buttons";
+// eslint-disable-next-line
 import Styles from './Style.css';
 
 class Login extends Component{
