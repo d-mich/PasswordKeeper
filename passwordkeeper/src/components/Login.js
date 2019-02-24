@@ -7,64 +7,60 @@ import Styles from './Style.css';
 
 class Login extends Component{
 
-    constructor() {
-        super();        
-        this.state = {
-          user: null
-        }        
-        this.authentication = this.authentication.bind(this)
-        this.authWithEmailPassword = this.authWithEmailPassword.bind(this)
-        this.setUser = this.setUser.bind(this)
-      }
+  constructor() {
+      super();        
+      this.state = {
+        user: null
+      }        
+      this.authentication = this.authentication.bind(this)
+      this.authWithEmailPassword = this.authWithEmailPassword.bind(this)
+      this.setUser = this.setUser.bind(this)
+    }
 
-      setRedirect(param) {
-        this.setState({
-          redirect: param
-        })
-      }
+    setRedirect(param) {
+      this.setState({
+        redirect: param
+      })
+    }
 
-      setUser(currentUser) {
-        this.setState({
-          user: currentUser
-        })
-      }
+    setUser(currentUser) {
+      this.setState({
+        user: currentUser
+      })
+    }
 
-      setUserInfo() {
-        this.props.setLocalUser(
-          JSON.parse(JSON.stringify(this.state.user.uid)),
-          JSON.parse(JSON.stringify(this.state.user.email)),
-          JSON.parse(JSON.stringify(this.state.user.displayName)),
-          JSON.parse(JSON.stringify(this.state.user.photoURL))
-        )
-        this.props.setStateUser()
-      }
+    setUserInfo() {
+      this.props.setLocalUser(
+        JSON.parse(JSON.stringify(this.state.user.uid)),
+        JSON.parse(JSON.stringify(this.state.user.email)),
+        JSON.parse(JSON.stringify(this.state.user.displayName)),
+        JSON.parse(JSON.stringify(this.state.user.photoURL))
+      )
+      this.props.setStateUser()
+    }
 
-      authentication(provider) {
-        fire.auth().signInWithPopup(provider)
-        .then((result) => {              
-          //set user state
-          this.setUser(result.user)                
-          //set authenticated true
-          this.props.setAuthenticated(true)
-          //set user info
-          this.setUserInfo() 
-        })
-        .catch((error) => {
-          if(error.code === 'auth/account-exists-with-different-credential') {
-            alert("Email collegata ad un altro account");
-          } else alert("Errore login:"+error)
-        });
-      }
+    authentication(provider) {
+      fire.auth().signInWithPopup(provider)
+      .then((result) => {    
+        this.setUser(result.user) 
+        this.setUserInfo()        
+        this.props.setAuthenticated(true)
+      })
+      .catch((error) => {
+        if(error.code === 'auth/account-exists-with-different-credential') {
+          alert("Email collegata ad un altro account");
+        } else alert("Errore login:"+error)
+      });
+    }
   
     authWithEmailPassword (event) {    
       const email = this.emailInput.value
       const password = this.passwordInput.value 
       fire.auth().signInWithEmailAndPassword(email, password)
-        .then((result) => {              
-        //set user state
-        this.setUser(result.user)
-        //set user info
-        this.setUserInfo()
+        .then((result) => {       
+        this.setUser(result.user)  
+        this.setUserInfo()        
+        this.props.setAuthenticated(true)
         }).catch((error) => {
           if(error.code === 'auth/account-exists-with-different-credential') {
             alert("Email collegata ad un altro account");
@@ -72,11 +68,10 @@ class Login extends Component{
             alert("Password errata");
           } else if (error.code === 'auth/user-not-found') {
             fire.auth().createUserWithEmailAndPassword(email, password)
-            .then((result) => {              
-              //set user state
-              this.setUser(result.user)
-              //set user info
-              this.setUserInfo()
+            .then((result) => {    
+              this.setUser(result.user) 
+              this.setUserInfo()        
+              this.props.setAuthenticated(true)
             }).catch((error) => {
               if(error.code === 'auth/weak-password') {
                 alert("La password deve contenere almeno 6 caratteri");
@@ -118,6 +113,6 @@ class Login extends Component{
       </div>   
       );
     }
-}
+  }
 
 export default Login;

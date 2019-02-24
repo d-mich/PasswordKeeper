@@ -110,6 +110,7 @@ class App extends Component {
                     userID={this.state.userID}
                     email={this.state.email}
                     name={this.state.name}
+                    setStateUser={this.setStateUser}
                     setLocalUser={this.setStateUser}/>              
                   } />
                   

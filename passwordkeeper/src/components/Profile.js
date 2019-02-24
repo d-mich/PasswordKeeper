@@ -78,9 +78,7 @@ class Profile extends Component {
       alert("Account "+accountNuovo+" aggiunto")
     } else {
       alert("Tutti i campi devono essere compilati")
-      
     }
-
     this.accountForm.reset();
   }
 
@@ -123,7 +121,7 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    this.readUserData(this.state.userID)
+    this.readUserData(this.props.userID)
   }
 
   getModal() {
