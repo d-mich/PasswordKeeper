@@ -1,4 +1,5 @@
 import React, { Component } from 'react';
+import { Redirect } from 'react-router-dom';
 import { Button, Modal } from 'react-bootstrap'
 import { fire } from '../config/Fire';
 
@@ -20,7 +21,7 @@ class Delete extends Component {
       this.setState({ show: true });
     }
 
-    deleteUserData = (props) => {
+    deleteUserData = () => {
       //cancellazione dati firebase
       fire.database().ref('users/'+this.props.userID).remove();
       //logout
@@ -29,8 +30,6 @@ class Delete extends Component {
       this.handleClose()
       //cancellazione local storage
       this.deleteStorage()
-      //redirect
-      this.props.history.push('/home')
     }
 
     deleteStorage() {
@@ -39,6 +38,11 @@ class Delete extends Component {
     }
     
     render() {
+      
+      /* if (this.props.authenticated === false) {
+        return <Redirect to="/"/>
+      } */
+
       return (
           <div className="deleteComponents">
           <br />
@@ -57,7 +61,10 @@ class Delete extends Component {
                     <ul>
                         <li>UserID: {this.props.userID}</li>
                         <li>Email: {this.props.email}</li>
-                        <li>Nome: {this.props.name}</li>
+                        {this.props.name === 'null'
+                          ? null
+                          : <li>Nome: {this.props.name}</li>
+                        }
                     </ul>
                 </Modal.Body>
                 <Modal.Footer>

@@ -91,36 +91,34 @@ class App extends Component {
                 <Switch>            
                   <Route exact path="/" component={Welcome}/>
 
-                  <Route path="/login" render={(props) => 
+                  <Route path="/login" render={() => 
                         <Login setAuthenticated={this.setAuthenticated}
+                        authenticated={this.state.authenticated}
                         setLocalUser={this.setLocalUser}
-                        setStateUser={this.setStateUser}
-                        {...props}/> //per history.push
+                        setStateUser={this.setStateUser}/>
                       } />
                 
                   {this.state.authenticated 
                   ? <>                
-                    <Route path="/logout" render={(props) => 
+                    <Route path="/logout" render={() => 
                       <Logout 
-                      userID={this.state.userID}
-                      {...props}/> //per history.push              
+                      userID={this.state.userID}/>              
                     } />
                     
-                    <Route path="/profile" render={(props) => 
+                    <Route path="/profile" render={() => 
                       <Profile 
                       userID={this.state.userID}
                       email={this.state.email}
                       name={this.state.name}
-                      setLocalUser={this.setStateUser}
-                      {...props}/> //per history.push              
+                      setLocalUser={this.setStateUser}/>              
                     } />
                     
-                    <Route path="/cancellazione" render={(props) => 
+                    <Route path="/cancellazione" render={() => 
                       <Delete 
+                      authenticated={this.state.authenticated}
                       userID={this.state.userID}
                       name={this.state.name}
-                      email={this.state.email}
-                      {...props}/> //per history.push              
+                      email={this.state.email}/>           
                     } />
                     <Route path="/info" component={Info} />                    
                     </>   

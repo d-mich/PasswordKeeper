@@ -48,9 +48,7 @@ class Login extends Component{
           //set authenticated true
           this.props.setAuthenticated(true)
           //set user info
-          this.setUserInfo()
-          //redirect
-          this.props.history.push('/profile')   
+          this.setUserInfo() 
         })
         .catch((error) => {
           if(error.code === 'auth/account-exists-with-different-credential') {
@@ -67,9 +65,7 @@ class Login extends Component{
         //set user state
         this.setUser(result.user)
         //set user info
-        this.setUserInfo()    
-        //redirect
-        this.props.history.push('/profile')  
+        this.setUserInfo()
         }).catch((error) => {
           if(error.code === 'auth/account-exists-with-different-credential') {
             alert("Email collegata ad un altro account");
@@ -81,9 +77,7 @@ class Login extends Component{
               //set user state
               this.setUser(result.user)
               //set user info
-              this.setUserInfo()    
-              //redirect
-              this.props.history.push('/profile') 
+              this.setUserInfo()
             }).catch((error) => {
               if(error.code === 'auth/weak-password') {
                 alert("La password deve contenere almeno 6 caratteri");
@@ -97,6 +91,10 @@ class Login extends Component{
     }
 
     render() {
+
+      if (this.props.authenticated === true) {
+        return <Redirect to='/profile'/>
+      }
 
       return (
         <div className="loginStyle">
