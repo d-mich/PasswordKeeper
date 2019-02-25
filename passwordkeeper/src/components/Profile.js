@@ -126,7 +126,7 @@ class Profile extends Component {
   }
 
   componentDidMount() {
-    this.readUserData(this.props.userID)
+    this.readUserData(this.state.userID)
   }
 
   getModal() {
